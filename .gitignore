@@ -7,6 +7,9 @@
 *.db
 *.db-journal
 .DS_Store
+*.egg
+*.egg-info
+*.eggs
 /.emacs*
 .ipynb_checkpoints
 *.lock
