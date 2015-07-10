@@ -21,6 +21,8 @@ class SearchManager(object):
 
     def lookup(self, id_list, **kw):
         result_id_pack = ','.join([str(_id) for _id in id_list])
+        if not result_id_pack:
+            return []
         return self.twitter.statuses.lookup(_id=result_id_pack)
 
     @staticmethod

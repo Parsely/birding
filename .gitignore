@@ -2,6 +2,7 @@
 *~
 \#*
 *.aux
+_build
 *.codekit
 .coverage
 *.db
@@ -18,6 +19,7 @@ __MACOSX
 *.out
 *.pdf
 *.pyc
+/_resources
 *.sqlite
 *.sqlite-journal
 *.sw*

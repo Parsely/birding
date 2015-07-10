@@ -1,6 +1,6 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
-from . import search, twitter_api
+from . import bolt, search, spout, twitter_api
 from .search import SearchManager
 from .twitter_api import Twitter
 from .version import VERSION, __version__
@@ -13,6 +13,8 @@ __all__ = [
     'VERSION',
     '__license__',
     '__version__',
+    'bolt',
     'search',
+    'spout',
     'twitter_api',
 ]
