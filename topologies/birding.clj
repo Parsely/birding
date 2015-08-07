@@ -27,6 +27,13 @@
           ["url" "timestamp" "lookup_result"]
           :p 2
           )
+     "result-topic-bolt" (python-bolt-spec
+          options
+          {"lookup-bolt" :shuffle}
+          "birding.bolt.ResultTopicBolt"
+          []
+          :p 1
+          )
     }
   ]
 )

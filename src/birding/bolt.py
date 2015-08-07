@@ -1,5 +1,8 @@
-from __future__ import absolute_import, print_function, unicode_literals
+from __future__ import absolute_import, print_function
 
+import json
+
+from pykafka import KafkaClient
 from streamparse.bolt import Bolt
 
 from .search import SearchManager
@@ -33,3 +36,17 @@ class TwitterLookupBolt(Bolt):
             .format(url=url, timestamp=timestamp))
         lookup_result = self.manager.lookup_search_result(search_result)
         self.emit([url, timestamp, lookup_result])
+
+
+class ResultTopicBolt(Bolt):
+    def initialize(self, conf, ctx):
+        # TODO: Move specifics into configuration.
+        self.client = KafkaClient(hosts='127.0.0.1:9092')
+        self.topic = self.client.topics['tweet']
+        self.producer = self.topic.get_producer()
+
+    def process(self, tup):
+        # This could be more efficient by passing the result from twitter
+        # straight through to the producer, instead of deserializing and
+        # reserializing json.
+        self.producer.produce(json.dumps(status) for status in tup.values[2])
