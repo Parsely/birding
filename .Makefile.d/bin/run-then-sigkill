@@ -1,0 +1,8 @@
+#!/bin/bash
+# Wrap command line, sending a kill -9 when receiving a signal.
+
+"$@" &
+pid=$!
+
+trap "trap - INT TERM EXIT; kill -9 $pid" INT TERM EXIT
+wait $pid

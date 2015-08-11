@@ -26,9 +26,12 @@ run-zookeeper: vendor-kafka
 	$(DIR)/bin/zookeeper-server-start.sh $(DIR)/config/zookeeper.properties
 
 run-kafka: vendor-kafka wait-tcp-2181
-	$(DIR)/bin/kafka-server-start.sh $(DIR)/config/server.properties
+	$(wrapper) $(DIR)/bin/kafka-server-start.sh $(DIR)/config/server.properties
 
 run-zookeeper run-kafka: DIR := $(VENDOR)/opt/kafka
+
+# Sending kafka SIGKILL is dramatic, but it does not exit if zookeeper is gone.
+run-kafka: wrapper := .Makefile.d/bin/run-then-sigkill
 
 run-streamparse: $(sparse) wait-tcp-9092
 	@$(KAFKA_DIR)/bin/kafka-topics.sh --create --zookeeper localhost:2181 \
