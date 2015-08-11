@@ -1,10 +1,10 @@
 birding: public API twitter search stream
 -----------------------------------------
 
-Work in progress. Developing for Python 2.7 and Python 3.4. Create a
-virtualenv, then::
+Work in progress. Developing for Python 2.7, and later Python
+3.4+. Dependencies are fully automated; run with::
 
-    python setup.py develop
+    make run
 
 Original motivation: a `streamparse <https://github.com/Parsely/streamparse>`_
 and `pykafka <https://github.com/Parsely/pykafka>`_ project which is both

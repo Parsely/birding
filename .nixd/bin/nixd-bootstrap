@@ -1,0 +1,95 @@
+#!/bin/bash
+# Bootstrap a nixd project by downloading nixd and verifying checksum.
+#
+# Note: This uses downloaded nixd to verify checksum; use trusted https.
+# This file is provided by the nixd project.
+
+# Exit immediately if a command error or non-zero return occurs.
+set -e
+
+GITHUB_REPO=${GITHUB_REPO:-rduplain/nixd}
+GITHUB_BASE=${GITHUB_BASE:-https://raw.githubusercontent.com}
+GITHUB_PATTERN=${GITHUB_PATTERN:-$GITHUB_BASE/$GITHUB_REPO/COMMIT/bin/nixd}
+
+usage() {
+    # Print program usage to stderr and return 2.
+
+    exec >&2 # Redirect all further stdout to stderr.
+
+    if [ $# -gt 0 ]; then
+        # Print message argument, if given.
+        echo "$@"
+        echo
+    fi
+
+    echo "usage: $0 DESTINATION NIXD_GIT_COMMIT_OR_URL sha1 CHECKSUM"
+    echo
+    echo "DESTINATION            - destination filepath of resulting download"
+    echo "NIXD_GIT_COMMIT_OR_URL - nixd git commit hash or full download URL"
+    echo "CHECKSUM               - checksum of nixd executable file"
+    return 2
+}
+
+main() {
+    # Go get nixd as directed.
+
+    if [ $# -ne 4 ]; then
+        usage
+    fi
+
+    local nixd="$1"
+    local git_commit_or_url=$2
+    local hash_function=$3
+    local hash_value=$4
+    shift 4
+
+    if ! which curl > /dev/null; then
+        echo "Requires 'curl' program, but could not find it in PATH." >&2
+        return 3
+    fi
+
+    if [ -e "$nixd" ]; then
+        echo "Abort. File already exists: $nixd" >&2
+        return 2
+    fi
+
+    trap "if [ -e '$nixd' ]; then mv -v '$nixd' '$nixd'.rej; fi" INT TERM EXIT
+
+    local url
+    case "$git_commit_or_url" in
+        [A-Fa-f0-9]*)
+            url=${GITHUB_PATTERN/COMMIT/$git_commit_or_url}
+            ;;
+        *)
+            url=$git_commit_or_url
+            ;;
+    esac
+
+    local dir=$( dirname "$nixd" )
+    mkdir -p "$dir"
+
+    curl -L -o "$nixd" $url
+
+    if ! grep -q 'checksum() {' "$nixd"; then
+        echo "Abort. Download is invalid. Is the commit hash / URL valid?" >&2
+        return 1
+    fi
+
+    chmod 775 "$nixd"
+
+    if "$nixd" checksum "$nixd" $hash_function TEST > /dev/null 2>&1; then
+        echo "Abort. Download appears to accept any checksum." >&2
+        return 1
+    fi
+
+    if "$nixd" checksum "$nixd" $hash_function $hash_value; then
+        trap - INT TERM EXIT
+        echo "Successfully bootstrapped nixd at $nixd"
+        return 0
+    else
+        echo "Abort. File checksum is invalid: $nixd" >&2
+        return 1
+    fi
+}
+
+main "$@"

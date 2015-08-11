@@ -1,0 +1,40 @@
+#!/bin/bash
+# Install python2.7 virtualenv.
+
+PYTHON=python2.7
+PREFIX=$NIXD_OPT/$PYTHON
+
+UNPACKED=virtualenv-13.1.0
+ARCHIVE=$UNPACKED.tar.gz
+MD5SUM=70f63a429b7dd7c3e10f6af09ed32554
+
+PIP=$PREFIX/bin/pip
+
+check() {
+    nixd_ls $PREFIX/bin/python
+    nixd_ls $PREFIX/bin/pip
+}
+
+resources() {
+    echo https://pypi.python.org/packages/source/v/virtualenv/$ARCHIVE $ARCHIVE md5 $MD5SUM
+}
+
+pretest() {
+    nixd check_for_program $PYTHON
+    nixd_ls $REQUIREMENTS
+}
+
+install() {
+    if [ ! -e $PREFIX/bin/python ]; then
+        nixd_echo "Installing $PYTHON virtualenv."
+        tar -xzf $ARCHIVE
+        VIRTUALENV_PY=`pwd`/$UNPACKED/virtualenv.py
+        nixd_echo "Ensuring virtualenv.py is unpacked ..."
+        nixd_ls $VIRTUALENV_PY
+        nixd_echo "Installing virtualenv to $PREFIX ..."
+        cd $NIXD_OPT
+        $PYTHON $VIRTUALENV_PY $PYTHON
+    fi
+}
+
+nixd_run "$@"

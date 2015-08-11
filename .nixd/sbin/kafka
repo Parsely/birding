@@ -1,0 +1,60 @@
+#!/bin/bash
+# Download and unpack kafka.
+
+SCALA_VERSION=2.10
+KAFKA_VERSION=0.8.2.1
+UNPACKED=kafka_$SCALA_VERSION-$KAFKA_VERSION
+ARCHIVE=$UNPACKED.tgz
+MD5SUM=446eab1f5329eb03662926aa1cb0845d
+
+DESTINATION=$NIXD_OPT/kafka
+
+check() {
+    nixd_ls $DESTINATION
+}
+
+resources() {
+    local url=`locate_apache_mirror /kafka/$KAFKA_VERSION/$ARCHIVE`
+    echo $url $ARCHIVE md5 $MD5SUM
+}
+
+pretest() {
+    check_java_version
+}
+
+check_java_version() {
+    if ! java_version=$(java -version 2>&1); then
+        nixd_error "No java found."
+        if [ -n "$java_version" ]; then
+            nixd_error $java_version
+        fi
+        return 1
+    fi
+
+    if [ -z "$java_version" ]; then
+        nixd_echo '`java -version` is empty.'
+        return 1
+    elif echo $java_version | grep -q '\bversion "1.7'; then
+        nixd_echo "Found Java 1.7."
+    elif echo $java_version | grep -q '\bversion "1.8'; then
+        nixd_echo "Found Java 1.8."
+    else
+        nixd_error "Java version is unsupported:"
+        nixd_error $java_version
+        return 1
+    fi
+}
+
+locate_apache_mirror() {
+    curl https://www.apache.org/dyn/closer.cgi?path=$1 |\
+        grep -i -A 10 'we suggest the following' |\
+        grep href | head -1 | cut -f 2 -d '"'
+}
+
+install() {
+    rm -fr $UNPACKED $DESTINATION
+    tar -xzf $ARCHIVE
+    mv -v $UNPACKED $DESTINATION
+}
+
+nixd_run "$@"

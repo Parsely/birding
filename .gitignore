@@ -18,6 +18,7 @@ _build
 __MACOSX
 *.out
 *.pdf
+/Procfile
 *.pyc
 /_resources
 *.sqlite

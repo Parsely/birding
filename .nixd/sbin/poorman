@@ -1,0 +1,26 @@
+#!/bin/bash
+# Install poorman program for Procfile execution.
+
+REPO=rduplain/poorman
+POORMAN_VERSION=907b20b7bc05b232f346104992ef67a30838d15c
+SHA1SUM=d5fde241484bb55b968acafbf86e9827c650b18f
+
+check() {
+    nixd_ls $NIXD_PREFIX/bin/poorman
+    nixd_run_once # Run again if this nixd script is changed.
+}
+
+resources() {
+    local url=https://raw.githubusercontent.com/$REPO/$POORMAN_VERSION/poorman
+    echo $url poorman sha1 $SHA1SUM
+}
+
+install() {
+    nixd_echo "Make script executable ..."
+    chmod 775 poorman
+    nixd_echo "Install script to $NIXD_PREFIX/bin ..."
+    mkdir -pv $NIXD_PREFIX/bin/
+    mv -v poorman $NIXD_PREFIX/bin/
+}
+
+nixd_run "$@"
