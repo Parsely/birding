@@ -25,6 +25,13 @@ run: POORMAN := $(VENDOR)/usr/bin/poorman
 # Add run dependencies to reduce race between processes.
 run: vendor-kafka vendor-python2.7
 
+# Ensure twitter credentials are in place.
+run: run-twitter
+
+run-twitter: birding-dev
+	@echo Running twitter command to see if OAuth established ...
+	@$(VENDOR)/opt/python2.7/bin/twitter
+
 run-zookeeper: vendor-kafka
 	$(DIR)/bin/zookeeper-server-start.sh $(DIR)/config/zookeeper.properties
 
