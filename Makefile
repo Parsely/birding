@@ -22,6 +22,9 @@ Procfile: proc proc-zookeeper proc-kafka proc-streamparse
 run: vendor-poorman
 run: POORMAN := $(VENDOR)/usr/bin/poorman
 
+# Have run depend on kafka so that there's no race between processes.
+run: vendor-kafka
+
 run-zookeeper: vendor-kafka
 	$(DIR)/bin/zookeeper-server-start.sh $(DIR)/config/zookeeper.properties
 
