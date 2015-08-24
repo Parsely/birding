@@ -11,6 +11,10 @@ __ https://github.com/Parsely/birding
 .. toctree::
    :maxdepth: 2
 
+To discuss this project, join the `streamparse user group`_.
+
+:ref:`Documentation Index <genindex>`
+
 .. _twitter: https://twitter.com
 .. _`twitter's public APIs`: https://api.twitter.com
 .. _Storm: http://storm.apache.org
@@ -18,3 +22,4 @@ __ https://github.com/Parsely/birding
 .. _Kafka: http://kafka.apache.org
 .. _streamparse: https://github.com/Parsely/streamparse
 .. _pykafka: https://github.com/Parsely/pykafka
+.. _`streamparse user group`: https://github.com/Parsely/streamparse#user-group
