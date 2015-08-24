@@ -1,5 +1,7 @@
-birding: streamparse/kafka demo
-===============================
+.. _index:
+
+`birding`: streamparse/kafka demo
+=================================
 
 `birding` is an `open source project`__ to produce a stream of recent twitter_
 activity based on a sequence of search terms, using only `twitter's public
@@ -8,9 +10,19 @@ real-time computing with Python_ using Storm_/streamparse_ and Kafka_/pykafka_.
 
 __ https://github.com/Parsely/birding
 
+:ref:`solo` describes how to interact with birding for development, demo, or
+light usage. :ref:`tour` provides a light introduction to internals.
+:ref:`production` discusses how birding is packaged for production use in an
+existing streamparse project. :ref:`config` discusses various options for
+birding behavior when running locally or in production.
+
 .. toctree::
    :maxdepth: 2
 
+   solo
+   tour
+   production
+   config
    api
 
 To discuss this project, join the `streamparse user group`_.
