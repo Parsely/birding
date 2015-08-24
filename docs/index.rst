@@ -11,6 +11,8 @@ __ https://github.com/Parsely/birding
 .. toctree::
    :maxdepth: 2
 
+   api
+
 To discuss this project, join the `streamparse user group`_.
 
 :ref:`Documentation Index <genindex>`
