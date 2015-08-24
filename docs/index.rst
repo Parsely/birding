@@ -1,22 +1,20 @@
-.. birding documentation master file, created by
-   sphinx-quickstart on Mon Aug 24 11:23:00 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+birding: streamparse/kafka demo
+===============================
 
-Welcome to birding's documentation!
-===================================
+`birding` is an `open source project`__ to produce a stream of recent twitter_
+activity based on a sequence of search terms, using only `twitter's public
+APIs`_. It serves as both a standalone project and a demo of distributed
+real-time computing with Python_ using Storm_/streamparse_ and Kafka_/pykafka_.
 
-Contents:
+__ https://github.com/Parsely/birding
 
 .. toctree::
    :maxdepth: 2
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+.. _twitter: https://twitter.com
+.. _`twitter's public APIs`: https://api.twitter.com
+.. _Storm: http://storm.apache.org
+.. _Python: http://python.org
+.. _Kafka: http://kafka.apache.org
+.. _streamparse: https://github.com/Parsely/streamparse
+.. _pykafka: https://github.com/Parsely/pykafka
