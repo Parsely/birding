@@ -10,6 +10,7 @@ real-time computing with Python_ using Storm_/streamparse_ and Kafka_/pykafka_.
 
 __ https://github.com/Parsely/birding
 
+:ref:`topology` describes the problem and how it fits into a topology.
 :ref:`solo` describes how to interact with birding for development, demo, or
 light usage. :ref:`tour` provides a light introduction to internals.
 :ref:`production` discusses how birding is packaged for production use in an
@@ -19,11 +20,15 @@ birding behavior when running locally or in production.
 .. toctree::
    :maxdepth: 2
 
+   topology
    solo
    tour
    production
    config
+   todo
    api
+
+This project and its documentation are works in progress. See :ref:`todo`.
 
 To discuss this project, join the `streamparse user group`_.
 
