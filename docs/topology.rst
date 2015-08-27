@@ -39,7 +39,11 @@ prefers Python with Kafka I/O, streamparse_ and pykafka_ are relavant.
 Topology
 --------
 
-.. todo:: Visualize birding topology.
+Given the problem statement, a streaming solution looks something like:
+
+.. Anyone with the link should be able to access / fork this drawing.
+.. image:: birding-topology-sketch.svg
+   :target: https://docs.google.com/drawings/d/1dijNLPjn_96Q2VyPaiGYUfrnO6jXA0sBcIEKcnNERjE/edit
 
 
 Other Goals
