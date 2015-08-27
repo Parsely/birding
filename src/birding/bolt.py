@@ -14,26 +14,26 @@ class TwitterSearchBolt(Bolt):
         """Initialization steps:
 
         1. Prepare :class:`~birding.twitter_api.Twitter` object w/OAuth file.
-        2. Prepare to track searched URLs as to avoid redundant searches.
+        2. Prepare to track searched terms as to avoid redundant searches.
         """
         self.manager = SearchManager(Twitter.from_oauth_file())
-        self.url_set = set() # This will not scale.
+        self.term_set = set() # This will not scale.
 
     def process(self, tup):
         """Process steps:
 
-        1. Stream in (url, timestamp).
-        2. Perform :meth:`~birding.search.SearchManager.search` on URL.
-        3. Emit (url, timestamp, search_result).
+        1. Stream in (term, timestamp).
+        2. Perform :meth:`~birding.search.SearchManager.search` on term.
+        3. Emit (term, timestamp, search_result).
         """
-        url, timestamp = tup.values
-        if url not in self.url_set:
+        term, timestamp = tup.values
+        if term not in self.term_set:
             self.log(
-                'search: {url}, {timestamp}'
-                .format(url=url, timestamp=timestamp))
-            search_result = self.manager.search(q=url)
-            self.emit([url, timestamp, search_result])
-            self.url_set.add(url)
+                'search: {term}, {timestamp}'
+                .format(term=term, timestamp=timestamp))
+            search_result = self.manager.search(q=term)
+            self.emit([term, timestamp, search_result])
+            self.term_set.add(term)
 
 
 class TwitterLookupBolt(Bolt):
@@ -47,16 +47,16 @@ class TwitterLookupBolt(Bolt):
     def process(self, tup):
         """Process steps:
 
-        1. Stream in (url, timestamp, search_result).
+        1. Stream in (term, timestamp, search_result).
         2. Perform :meth:`~birding.search.SearchManager.lookup_search_result`.
-        3. Emit (url, timestamp, lookup_result).
+        3. Emit (term, timestamp, lookup_result).
         """
-        url, timestamp, search_result = tup.values
+        term, timestamp, search_result = tup.values
         self.log(
-            'lookup: {url}, {timestamp}'
-            .format(url=url, timestamp=timestamp))
+            'lookup: {term}, {timestamp}'
+            .format(term=term, timestamp=timestamp))
         lookup_result = self.manager.lookup_search_result(search_result)
-        self.emit([url, timestamp, lookup_result])
+        self.emit([term, timestamp, lookup_result])
 
 
 class ResultTopicBolt(Bolt):
