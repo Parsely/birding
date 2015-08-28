@@ -65,7 +65,7 @@ Next, goto one of:
 * :ref:`tour`
 
 .. _twitter: https://twitter.com
-.. _`twitter's public APIs`: https://api.twitter.com
+.. _`twitter's public APIs`: https://dev.twitter.com/rest/public
 .. _Kafka: http://kafka.apache.org
 .. _Python: http://python.org
 .. _`GET search/tweets`:

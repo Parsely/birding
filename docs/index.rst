@@ -35,7 +35,7 @@ To discuss this project, join the `streamparse user group`_.
 :ref:`Documentation Index <genindex>`
 
 .. _twitter: https://twitter.com
-.. _`twitter's public APIs`: https://api.twitter.com
+.. _`twitter's public APIs`: https://dev.twitter.com/rest/public
 .. _Storm: http://storm.apache.org
 .. _Python: http://python.org
 .. _Kafka: http://kafka.apache.org
