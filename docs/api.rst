@@ -13,7 +13,6 @@ API
 
 .. autoclass:: SearchManager
    :members:
-   :inherited-members:
 
 
 .. Use ClassName() to remove __init__ function signature from autoclass, as
