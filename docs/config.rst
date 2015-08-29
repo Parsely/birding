@@ -3,4 +3,4 @@
 Configuring `birding`
 =====================
 
-.. todo:: Enumerate options throughout birding config.
+.. automodule:: birding.config

@@ -5,6 +5,7 @@ import json
 from pykafka import KafkaClient
 from streamparse.bolt import Bolt
 
+from .config import get_config
 from .search import SearchManager
 from .twitter_api import Twitter
 
@@ -66,9 +67,9 @@ class ResultTopicBolt(Bolt):
         1. Connect to Kafka.
         2. Prepare Kafka producer for `tweet` topic.
         """
-        # TODO: Move specifics into configuration.
-        self.client = KafkaClient(hosts='127.0.0.1:9092')
-        self.topic = self.client.topics['tweet']
+        config = get_config()['ResultTopicBolt']
+        self.client = KafkaClient(hosts=config['hosts'])
+        self.topic = self.client.topics[config['topic']]
         self.producer = self.topic.get_producer()
 
     def process(self, tup):

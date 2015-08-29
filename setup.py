@@ -40,8 +40,11 @@ classifiers = [
 
 install_requires = [
     'pykafka',
+    'pyyaml',
+    'repoze.lru',
     'six',
     'streamparse',
+    'travesty',
     'twitter',
 ]
 

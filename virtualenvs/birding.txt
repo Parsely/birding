@@ -1,4 +1,7 @@
 pykafka
+pyyaml
+repoze.lru
 six
 streamparse
+travesty
 twitter

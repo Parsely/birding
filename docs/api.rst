@@ -29,3 +29,6 @@ API
 
 .. autoclass:: ResultTopicBolt()
    :members:
+
+
+.. autofunction:: birding.config.get_config

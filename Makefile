@@ -61,6 +61,7 @@ birding-dev: .develop
 
 .PHONY: birding-dev
 
+develop: .develop
 .develop: virtualenvs/birding.txt Makefile setup.py
 	$(VENDOR)/opt/python2.7/bin/pip install sphinx sphinx-autobuild
 	$(VENDOR)/opt/python2.7/bin/pip install -r $<
