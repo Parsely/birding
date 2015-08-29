@@ -7,16 +7,16 @@ from streamparse.spout import Spout
 
 
 class SimpleSimulationSpout(Spout):
-    urls = [
-        'http://www.parsely.com/',
-        'http://streamparse.readthedocs.org/',
-        'https://pypi.python.org/pypi/streamparse',
+    terms = [
+        'real-time analytics',
+        'apache storm',
+        'pypi',
     ]
 
     def initialize(self, stormconf, context):
-        self.url_seq = itertools.cycle(self.urls)
+        self.term_seq = itertools.cycle(self.terms)
 
     def next_tuple(self):
-        url = next(self.url_seq)
+        term = next(self.term_seq)
         timestamp = datetime.datetime.now().isoformat()
-        self.emit([url, timestamp])
+        self.emit([term, timestamp])
