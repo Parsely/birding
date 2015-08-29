@@ -1,3 +1,4 @@
+__FILE__ := $(lastword $(MAKEFILE_LIST))
 DIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
 include $(DIR)/path.mk
@@ -10,7 +11,8 @@ nixd := $(VENDOR)/bin/nixd
 
 export VENDOR
 
-$(nixd):
+$(nixd): $(__FILE__)
+	@rm -f $@
 	@$(VENDOR)/bin/nixd-bootstrap $(nixd) $(NIXD_VERSION) sha1 $(NIXD_SHA1SUM)
 
 vendor-%: $(nixd)
