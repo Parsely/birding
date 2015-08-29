@@ -65,6 +65,7 @@ birding-dev: .develop
 
 .develop: virtualenvs/birding.txt Makefile setup.py
 	$(VENDOR)/opt/python2.7/bin/pip install sphinx sphinx-autobuild
+	$(VENDOR)/opt/python2.7/bin/pip install -r $<
 	$(VENDOR)/opt/python2.7/bin/python2.7 setup.py develop
 	@touch $@
 
