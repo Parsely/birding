@@ -5,26 +5,26 @@
 (defn birding [options]
   [
     ;; spout configuration
-    {"url-spout" (python-spout-spec
+    {"term-spout" (python-spout-spec
           options
           "birding.spout.SimpleSimulationSpout"
-          ["url" "timestamp"]
+          ["term" "timestamp"]
           )
     }
     ;; bolt configuration
     {"search-bolt" (python-bolt-spec
           options
-          ; Use field grouping on URL to support in-memory caching.
-          {"url-spout" ["url"]}
+          ; Use field grouping on term to support in-memory caching.
+          {"term-spout" ["term"]}
           "birding.bolt.TwitterSearchBolt"
-          ["url" "timestamp" "search_result"]
+          ["term" "timestamp" "search_result"]
           :p 2
           )
      "lookup-bolt" (python-bolt-spec
           options
           {"search-bolt" :shuffle}
           "birding.bolt.TwitterLookupBolt"
-          ["url" "timestamp" "lookup_result"]
+          ["term" "timestamp" "lookup_result"]
           :p 2
           )
      "result-topic-bolt" (python-bolt-spec

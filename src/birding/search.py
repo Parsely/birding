@@ -12,14 +12,26 @@ class SearchManager(object):
         self.twitter = twitter
 
     def search(self, q=None, **kw):
+        """Search twitter for ``q``, return `results`__ directly from twitter.
+
+        __ https://dev.twitter.com/rest/reference/get/search/tweets
+        """
         if q is None:
             raise ValueError('No search query provided for `q` keyword.')
         return self.twitter.search.tweets(q=q, **kw)
 
     def lookup_search_result(self, result, **kw):
+        """Perform :meth:`lookup` on return value of :meth:`search`."""
         return self.lookup(s['id_str'] for s in result['statuses'], **kw)
 
     def lookup(self, id_list, **kw):
+        """Lookup list of statuses, return `results`__ directly from twitter.
+
+        Input can be any sequence of numeric or string values representing
+        twitter status IDs.
+
+        __ https://dev.twitter.com/rest/reference/get/statuses/lookup
+        """
         result_id_pack = ','.join([str(_id) for _id in id_list])
         if not result_id_pack:
             return []

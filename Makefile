@@ -5,6 +5,14 @@ include .Makefile.d/command.mk
 run: Procfile
 	$(POORMAN) start
 
+docs: birding-dev
+	@touch doc/todo.rst # Force rebuild of todolist.
+	$(MAKE) -C docs html
+
+# Build docs in the vendored Python installation.
+docs: PATH := $(VENDOR)/opt/python2.7/bin:$(PATH)
+.PHONY: docs
+
 flakes: pyflakes-command
 	@find . -name '*.py' | xargs pyflakes
 
@@ -50,8 +58,16 @@ run-streamparse: $(sparse) wait-tcp-9092
 
 run-streamparse: KAFKA_DIR := $(VENDOR)/opt/kafka
 
-$(sparse): virtualenvs/birding.txt python2.7-command vendor-python2.7
-	$(VENDOR)/opt/python2.7/bin/pip install -r $<
+$(sparse): .develop
+birding-dev: .develop
 
-birding-dev: $(sparse)
+.PHONY: birding-dev
+
+.develop: virtualenvs/birding.txt Makefile setup.py
+	$(VENDOR)/opt/python2.7/bin/pip install sphinx sphinx-autobuild
 	$(VENDOR)/opt/python2.7/bin/python2.7 setup.py develop
+	@touch $@
+
+# Reinstall dependencies if Python goes missing or is reinstalled.
+.develop: $(VENDOR)/opt/python2.7/bin/python2.7
+$(VENDOR)/opt/python2.7/bin/python2.7: python2.7-command vendor-python2.7
