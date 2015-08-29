@@ -54,4 +54,4 @@ class SearchManager(object):
             """).strip().format(
                 screen_name=status['user']['screen_name'],
                 text=status['text']))
-        return '\n\n'.join(status_str_list)
+        return u'\n\n'.join(status_str_list)

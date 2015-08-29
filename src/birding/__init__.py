@@ -2,7 +2,7 @@ from __future__ import absolute_import, print_function
 
 import logging
 
-from . import bolt, config, search, spout, twitter_api
+from . import bolt, config, follow, search, spout, twitter_api
 from .search import SearchManager
 from .twitter_api import Twitter
 from .version import VERSION, __version__
@@ -17,6 +17,7 @@ __all__ = [
     '__version__',
     'bolt',
     'config',
+    'follow',
     'search',
     'spout',
     'twitter_api',
