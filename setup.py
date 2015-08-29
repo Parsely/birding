@@ -24,20 +24,24 @@ from setuptools import setup, find_packages
 
 
 classifiers = [
-    'Development Status :: 1 - Planning',
+    'Development Status :: 3 - Alpha',
+    # TODO: 'Development Status :: 4 - Beta',
+    # TODO: 'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: Apache Software License',
     'Programming Language :: Python',
     'Programming Language :: Python',
     'Programming Language :: Python :: 2',
     'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python',
-    'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.4',
+    # TODO: 'Programming Language :: Python :: 3',
+    # TODO: 'Programming Language :: Python :: 3.4',
+    # TODO: 'Programming Language :: Python :: 3.5',
 ]
 
 install_requires = [
+    'pykafka',
     'six',
+    'streamparse',
     'twitter',
 ]
 
@@ -56,7 +60,7 @@ dependency_links = []
 setup_requires = []
 
 if 'nosetests' in sys.argv[1:]:
-    setup_requires.append('nose')
+    setup_requires.extend(tests_require)
 
 
 def get_version(filepath='src/birding/version.py'):
