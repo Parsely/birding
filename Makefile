@@ -14,7 +14,7 @@ docs: PATH := $(VENDOR)/opt/python2.7/bin:$(PATH)
 .PHONY: docs
 
 flakes: pyflakes-command
-	@find . -name '*.py' | xargs pyflakes
+	@find *.py src -name '*.py' | xargs pyflakes
 
 ## Run Recipes w/Automated Requirements
 
