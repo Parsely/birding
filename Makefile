@@ -7,10 +7,8 @@ run: Procfile
 
 docs: birding-dev
 	@touch docs/todo.rst # Force rebuild of todolist.
-	$(MAKE) -C docs html
+	@PATH=$(VENDOR)/opt/python2.7/bin:$(PATH) $(MAKE) -C docs html
 
-# Build docs in the vendored Python installation.
-docs: PATH := $(VENDOR)/opt/python2.7/bin:$(PATH)
 .PHONY: docs
 
 flakes: pyflakes-command
