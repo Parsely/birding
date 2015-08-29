@@ -6,6 +6,7 @@ run: Procfile
 	$(POORMAN) start
 
 docs: birding-dev
+	@touch doc/todo.rst # Force rebuild of todolist.
 	$(MAKE) -C docs html
 
 # Build docs in the vendored Python installation.
