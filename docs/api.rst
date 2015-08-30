@@ -37,3 +37,12 @@ API
 
 
 .. autofunction:: birding.config.get_config
+
+
+.. module:: birding.shelf
+
+.. autoclass:: Shelf
+   :members:
+
+.. autoclass:: LRUShelf
+   :members:

@@ -7,6 +7,7 @@ from streamparse.bolt import Bolt
 
 from .config import get_config
 from .search import SearchManager
+from .shelf import LRUShelf
 from .twitter_api import Twitter
 
 
@@ -18,7 +19,7 @@ class TwitterSearchBolt(Bolt):
         2. Prepare to track searched terms as to avoid redundant searches.
         """
         self.manager = SearchManager(Twitter.from_oauth_file())
-        self.term_set = set() # This will not scale.
+        self.term_shelf = LRUShelf()
 
     def process(self, tup):
         """Process steps:
@@ -28,13 +29,13 @@ class TwitterSearchBolt(Bolt):
         3. Emit (term, timestamp, search_result).
         """
         term, timestamp = tup.values
-        if term not in self.term_set:
+        if term not in self.term_shelf:
             self.log(
                 'search: {term}, {timestamp}'
                 .format(term=term, timestamp=timestamp))
             search_result = self.manager.search(q=term)
             self.emit([term, timestamp, search_result])
-            self.term_set.add(term)
+            self.term_shelf[term] = timestamp
 
 
 class TwitterLookupBolt(Bolt):
