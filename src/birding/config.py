@@ -12,7 +12,11 @@ definition.
 
 .. todo:: Document how to package ``birding.yml`` when :ref:`production`.
 
-For advanced API usage, see :func:`get_config`.
+For advanced API usage, see :func:`get_config`. The config includes an
+`Appendix` to support any additional values not known to birding, such that
+these values are available in ``config['Appendix']`` and bypass any
+validation. This is useful for code which uses birding's config loader and
+needs to define additional values.
 
 Defaults::
 
@@ -24,6 +28,7 @@ Defaults::
     ResultTopicBolt:
       hosts: 127.0.0.1:9092 # comma-separated list of hosts
       topic: tweet
+    Appendix: {}
 
 """
 
@@ -47,7 +52,8 @@ SCHEMA = tv.SchemaMapping().of(
         terms = tv.List().of(tv.String())),
     ResultTopicBolt = tv.SchemaMapping().of(
         hosts = tv.String(),
-        topic = tv.String()))
+        topic = tv.String()),
+    Appendix=tv.Passthrough())
 
 
 CACHE = LRUCache(16) # size
