@@ -10,4 +10,4 @@ proc:
 	@touch $(Procfile)
 
 proc-%:
-	@echo "$*: make run-$*" >> $(Procfile)
+	@echo "$*: make --no-print-directory run-$*" >> $(Procfile)
