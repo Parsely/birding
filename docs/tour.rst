@@ -64,7 +64,7 @@ Storm Spouts
 Spout_ classes provide Storm components which take birding's input and provide
 the source of streams in the topology:
 
-.. todo:: Outline birding spout implementation.
+* :class:`~birding.spout.TermCycleSpout` cycles through a static list of terms.
 
 
 Storm Topology

@@ -18,6 +18,12 @@ API
 .. Use ClassName() to remove __init__ function signature from autoclass, as
    component classes are not instantiated directly.
 
+.. module:: birding.spout
+
+.. autoclass:: TermCycleSpout()
+   :members:
+
+
 .. module:: birding.bolt
 
 .. autoclass:: TwitterSearchBolt()

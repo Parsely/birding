@@ -7,7 +7,7 @@
     ;; spout configuration
     {"term-spout" (python-spout-spec
           options
-          "birding.spout.SimpleSimulationSpout"
+          "birding.spout.TermCycleSpout"
           ["term" "timestamp"]
           )
     }

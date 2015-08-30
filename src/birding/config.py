@@ -16,6 +16,11 @@ For advanced API usage, see :func:`get_config`.
 
 Defaults::
 
+    TermCycleSpout:
+      terms:
+      - real-time analytics
+      - apache storm
+      - pypi
     ResultTopicBolt:
       hosts: 127.0.0.1:9092 # comma-separated list of hosts
       topic: tweet
@@ -38,6 +43,8 @@ BIRDING_CONF = os.environ.get('BIRDING_CONF', BIRDING_CONF_DEFAULT)
 
 
 SCHEMA = tv.SchemaMapping().of(
+    TermCycleSpout = tv.SchemaMapping().of(
+        terms = tv.List().of(tv.String())),
     ResultTopicBolt = tv.SchemaMapping().of(
         hosts = tv.String(),
         topic = tv.String()))
