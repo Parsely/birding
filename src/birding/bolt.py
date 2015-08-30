@@ -5,9 +5,8 @@ import json
 from pykafka import KafkaClient
 from streamparse.bolt import Bolt
 
-from .config import get_config
+from .config import get_config, import_name
 from .search import SearchManager
-from .shelf import LRUShelf
 from .twitter_api import Twitter
 
 
@@ -19,7 +18,9 @@ class TwitterSearchBolt(Bolt):
         2. Prepare to track searched terms as to avoid redundant searches.
         """
         self.manager = SearchManager(Twitter.from_oauth_file())
-        self.term_shelf = LRUShelf()
+        config = get_config()['TwitterSearchBolt']
+        shelf_class = import_name(config['shelf'], default_ns='birding.shelf')
+        self.term_shelf = shelf_class(**config['shelf_parameters'])
 
     def process(self, tup):
         """Process steps:

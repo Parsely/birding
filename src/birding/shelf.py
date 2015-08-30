@@ -54,7 +54,7 @@ class LRUShelf(Shelf):
     """An in-memory Least-Recently Used shelf up to `maxsize`.."""
 
     def __init__(self, maxsize=1000):
-        self.store = LRUCache(maxsize)
+        self.store = LRUCache(int(maxsize))
 
     def getitem(self, key):
         value = self.store.get(key, UNSET)

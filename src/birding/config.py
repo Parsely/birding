@@ -12,6 +12,11 @@ definition.
 
 .. todo:: Document how to package ``birding.yml`` when :ref:`production`.
 
+When a configuration value is a Python dotted name, it is a string reference to
+the Python object to import. In general, when the value is just an object name
+without a full namespace, its assumed to be the relevant birding namespace,
+e.g. ``LRUShelf`` is assumed to be ``birding.shelf.LRUShelf``.
+
 For advanced API usage, see :func:`get_config`. The config includes an
 `Appendix` to support any additional values not known to birding, such that
 these values are available in ``config['Appendix']`` and bypass any
@@ -25,6 +30,9 @@ Defaults::
       - real-time analytics
       - apache storm
       - pypi
+    TwitterSearchBolt:
+      shelf: LRUShelf # dotted name of shelf class
+      shelf_parameters: {} # keyword arguments passed to shelf constructor
     ResultTopicBolt:
       hosts: 127.0.0.1:9092 # comma-separated list of hosts
       topic: tweet
@@ -32,6 +40,7 @@ Defaults::
 
 """
 
+import importlib
 import logging
 import os
 import textwrap
@@ -50,6 +59,9 @@ BIRDING_CONF = os.environ.get('BIRDING_CONF', BIRDING_CONF_DEFAULT)
 SCHEMA = tv.SchemaMapping().of(
     TermCycleSpout = tv.SchemaMapping().of(
         terms = tv.List().of(tv.String())),
+    TwitterSearchBolt = tv.SchemaMapping().of(
+        shelf = tv.String(),
+        shelf_parameters = tv.StrMapping().of(tv.Passthrough())),
     ResultTopicBolt = tv.SchemaMapping().of(
         hosts = tv.String(),
         topic = tv.String()),
@@ -175,6 +187,39 @@ def overlay(upper, lower):
 
 def is_mapping(x):
     return isinstance(x, Mapping) or isinstance(x, dict)
+
+
+def import_name(name, default_ns=None):
+    """Import an object based on the dotted string.
+
+    >>> import_name('textwrap') # doctest: +ELLIPSIS
+    <module 'textwrap' from '...'>
+    >>> import_name('birding.config') # doctest: +ELLIPSIS
+    <module 'birding.config' from '...'>
+    >>> import_name('birding.config.get_config') # doctest: +ELLIPSIS
+    <function get_config at ...>
+    >>>
+
+    If `ns` is provided, use it as the namespace if `name` does not have a dot.
+
+    >>> ns = 'birding.config'
+    >>> x = import_name('birding.config.get_config')
+    >>> x # doctest: +ELLIPSIS
+    <function get_config at ...>
+    >>> x == import_name('get_config', default_ns=ns)
+    True
+    >>> x == import_name('birding.config.get_config', default_ns=ns)
+    True
+    >>>
+    """
+    if '.' not in name:
+        if default_ns is None:
+            return importlib.import_module(name)
+        else:
+            name = default_ns + '.' + name
+    module_name, object_name = name.rsplit('.', 1)
+    module = importlib.import_module(module_name)
+    return getattr(module, object_name)
 
 
 if __name__ == '__main__':
