@@ -11,12 +11,12 @@ activity based on a sequence of search terms, using only `twitter's public
 APIs`_. It serves as both a standalone project and a demo of distributed
 real-time computing with Python_ using Storm_/streamparse_ and Kafka_/pykafka_.
 
-Dependencies are fully automated; run with::
+Dependencies are fully automated; in a birding checkout, run with::
 
     make run
 
-See the docs (below) for discussion on how to use birding in an existing
-streamparse project.
+See the docs (below) for a full discussion of birding, including how to use
+birding in an existing streamparse project.
 
 To discuss this project, join the `streamparse user group`_.
 
