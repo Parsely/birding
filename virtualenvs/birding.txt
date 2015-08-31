@@ -1,3 +1,4 @@
+# Update setup.py install_requires when editing this list.
 pykafka
 pyyaml
 repoze.lru

@@ -38,6 +38,7 @@ classifiers = [
     # TODO: 'Programming Language :: Python :: 3.5',
 ]
 
+# Update virtualenvs/birding.txt when editing this list.
 install_requires = [
     'pykafka',
     'pyyaml',
