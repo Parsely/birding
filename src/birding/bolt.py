@@ -2,7 +2,6 @@
 
 import json
 
-from pykafka import KafkaClient
 from streamparse.bolt import Bolt
 
 from .config import get_config, import_name
@@ -99,7 +98,8 @@ class ResultTopicBolt(Bolt):
         2. Prepare Kafka producer for `tweet` topic.
         """
         config = get_config()['ResultTopicBolt']
-        self.client = KafkaClient(hosts=config['hosts'])
+        kafka_class = import_name(config['kafka_class'])
+        self.client = kafka_class(**config['kafka_init'])
         self.topic = self.client.topics[config['topic']]
         self.producer = self.topic.get_producer()
 

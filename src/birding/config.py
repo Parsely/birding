@@ -45,7 +45,9 @@ Defaults::
       index: tweet
       doc_type: tweet
     ResultTopicBolt:
-      hosts: 127.0.0.1:9092 # comma-separated list of hosts
+      kafka_class: pykafka.KafkaClient
+      kafka_init:
+        hosts: 127.0.0.1:9092 # comma-separated list of hosts
       topic: tweet
     Appendix: {}
 
@@ -80,7 +82,8 @@ SCHEMA = tv.SchemaMapping().of(
         index = tv.String(),
         doc_type = tv.String()),
     ResultTopicBolt = tv.SchemaMapping().of(
-        hosts = tv.String(),
+        kafka_class = tv.String(),
+        kafka_init = tv.StrMapping().of(tv.Passthrough()),
         topic = tv.String()),
     Appendix = tv.Passthrough())
 

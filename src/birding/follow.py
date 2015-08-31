@@ -7,24 +7,24 @@ import sys
 from contextlib import contextmanager
 from time import sleep
 
-from pykafka import KafkaClient
 from pykafka.exceptions import KafkaException
 
-from .config import get_config
+from .config import get_config, import_name
 from .search import SearchManager
 
 
 def follow_topic_from_config():
     """Read kafka config, then dispatch to `follow_topic`."""
     config = get_config()['ResultTopicBolt']
-    return follow_topic(config['hosts'], config['topic'])
+    kafka_class = import_name(config['kafka_class'])
+    return follow_topic(kafka_class, config['topic'], **config['kafka_init'])
 
 
-def follow_topic(hosts, name, retry_interval=1):
+def follow_topic(kafka_class, name, retry_interval=1, **kafka_init):
     """Dump each message from kafka topic to stdio."""
     while True:
         try:
-            client = KafkaClient(hosts=hosts)
+            client = kafka_class(**kafka_init)
             topic = client.topics[name]
             consumer = topic.get_simple_consumer(reset_offset_on_start=True)
         except Exception as e:
