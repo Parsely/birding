@@ -123,15 +123,20 @@ def get_config(filepath=None, default_loader=None, on_missing=None):
     if CACHE.get(cache_key) is not None:
         return CACHE.get(cache_key)
 
+    logger = logging.getLogger('birding')
+
     if filepath is None:
         filepath = BIRDING_CONF
     if default_loader is None:
         default_loader = get_defaults_file
     if on_missing is None:
-        on_missing = logging.getLogger('birding').info
+        on_missing = logger.info
+
+    logger.info(
+        'Looking for configuration file: {}'.format(os.path.abspath(filepath)))
     if not os.path.exists(filepath):
         # Log a message if filepath is default; raise error if not default.
-        on_missing('No {} configuration file found.'.format(BIRDING_CONF))
+        on_missing('No {} configuration file found.'.format(filepath))
         if filepath != BIRDING_CONF_DEFAULT:
             # Stat the missing file to result in OSError.
             os.stat(filepath)
