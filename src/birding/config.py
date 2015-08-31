@@ -13,7 +13,9 @@ definition.
 When a configuration value is a Python dotted name, it is a string reference to
 the Python object to import. In general, when the value is just an object name
 without a full namespace, its assumed to be the relevant birding namespace,
-e.g. ``LRUShelf`` is assumed to be ``birding.shelf.LRUShelf``.
+e.g. ``LRUShelf`` is assumed to be ``birding.shelf.LRUShelf``. Respective
+``*_init`` configuration values specify keyword (not positional) arguments to
+be passed to the class constructor.
 
 See :ref:`production` for further discussion on configuration in production
 environments.
@@ -33,10 +35,10 @@ Defaults::
       - apache storm
       - pypi
     TwitterSearchBolt:
-      shelf: LRUShelf # dotted name of shelf class
-      shelf_parameters: {} # keyword arguments passed to shelf constructor
+      shelf_class: LRUShelf
+      shelf_init: {}
     ElasticsearchIndexBolt:
-      elasticsearch_class: elasticsearch.Elasticsearch # dotted name of class
+      elasticsearch_class: elasticsearch.Elasticsearch
       elasticsearch_init:
         hosts:
         - localhost: 9200
@@ -70,8 +72,8 @@ SCHEMA = tv.SchemaMapping().of(
     TermCycleSpout = tv.SchemaMapping().of(
         terms = tv.List().of(tv.String())),
     TwitterSearchBolt = tv.SchemaMapping().of(
-        shelf = tv.String(),
-        shelf_parameters = tv.StrMapping().of(tv.Passthrough())),
+        shelf_class = tv.String(),
+        shelf_init = tv.StrMapping().of(tv.Passthrough())),
     ElasticsearchIndexBolt = tv.SchemaMapping().of(
         elasticsearch_class = tv.String(),
         elasticsearch_init = tv.StrMapping().of(tv.Passthrough()),

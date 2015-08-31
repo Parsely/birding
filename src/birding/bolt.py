@@ -19,8 +19,8 @@ class TwitterSearchBolt(Bolt):
         """
         self.manager = SearchManager(Twitter.from_oauth_file())
         config = get_config()['TwitterSearchBolt']
-        shelf_class = import_name(config['shelf'], default_ns='birding.shelf')
-        self.term_shelf = shelf_class(**config['shelf_parameters'])
+        shelf_class = import_name(config['shelf_class'], default_ns='birding.shelf')
+        self.term_shelf = shelf_class(**config['shelf_init'])
 
     def process(self, tup):
         """Process steps:
