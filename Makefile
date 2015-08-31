@@ -39,7 +39,8 @@ include .Makefile.d/wait.mk
 
 sparse := $(VENDOR)/opt/python2.7/bin/sparse
 
-Procfile: proc proc-zookeeper proc-kafka proc-streamparse proc-follow
+Procfile: proc proc-zookeeper proc-kafka proc-streamparse proc-follow \
+	proc-elasticsearch
 .PHONY: Procfile
 
 run: vendor-poorman
@@ -65,6 +66,9 @@ run-zookeeper run-kafka: DIR := $(VENDOR)/opt/kafka
 
 # Sending kafka SIGKILL is dramatic, but it does not exit if zookeeper is gone.
 run-kafka: wrapper := .Makefile.d/bin/run-then-sigkill
+
+run-elasticsearch: vendor-elasticsearch
+	$(VENDOR)/usr/bin/elasticsearch -Des.logger.level=INFO
 
 run-streamparse: $(sparse) wait-tcp-9092
 	@$(KAFKA_DIR)/bin/kafka-topics.sh --create --zookeeper localhost:2181 \

@@ -1,0 +1,94 @@
+#!/bin/bash
+
+. $NIXD_LIB/java.sh
+
+UNPACKED=elasticsearch-1.7.1
+ARCHIVE=$UNPACKED.tar.gz
+SHA1SUM=0984ae27624e57c12c33d4a559c3ebae25e74508
+
+BIN=$NIXD_PREFIX/bin
+EXE_BASENAME=elasticsearch
+DESTINATION=$NIXD_OPT/elasticsearch
+ES_YML=$DESTINATION/config/elasticsearch.yml
+LOGGING_YML=$DESTINATION/config/logging.yml
+ES_DATA=$NIXD_VAR/lib/elasticsearch
+
+# Space-delimited list of elasticsearch plugin identifiers.
+PLUGINS="royrusso/elasticsearch-HQ"
+
+# Log full JSON DSL detail when queries are above this threshold.
+SLOW_THRESHOLD=10s
+
+check() {
+    nixd_ls $BIN/$EXE_BASENAME $DESTINATION
+    nixd_newer_than $SYNONYMS_SRC
+}
+
+resources() {
+    local url=https://download.elastic.co/elasticsearch/elasticsearch/$ARCHIVE
+    echo $url $ARCHIVE sha1 $SHA1SUM
+}
+
+pretest() {
+    check_java_version
+}
+
+install() {
+    rm -fr $UNPACKED $DESTINATION
+    tar -xzf $ARCHIVE
+    mv -v $UNPACKED $DESTINATION
+    cd $BIN
+    ln -sf $DESTINATION/bin/$EXE_BASENAME $EXE_BASENAME
+    generate_elasticsearch_yml > $ES_YML
+    generate_logging_yml > $LOGGING_YML
+    install_plugins $PLUGINS
+}
+
+install_plugins() {
+    for plugin in "$@"; do
+        nixd_echo "Installing plugin: $plugin ..."
+        $DESTINATION/bin/plugin --install $plugin
+    done
+}
+
+# It's dangerous to go alone.
+# elasticsearch silently handles yml that does not make any sense.
+
+generate_elasticsearch_yml() {
+    # https://www.elastic.co/guide/en/elasticsearch/guide/current/_important_configuration_changes.html
+
+    echo 'cluster.name: birding'
+    if [ -n "$HOSTNAME" ]; then
+        echo "node.name: $HOSTNAME"
+    fi
+    cat -<<EOF
+path:
+  data: $ES_DATA
+  logs: /dev/null
+network:
+  host: ${ES_ADDRESS:-127.0.0.1}
+index.search.slowlog.threshold.query.info: $SLOW_THRESHOLD
+index.search.slowlog.threshold.fetch.info: $SLOW_THRESHOLD
+index.indexing.slowlog.threshold.index.info: $SLOW_THRESHOLD
+EOF
+}
+
+generate_logging_yml() {
+    cat -<<EOF
+# Override logger level with e.g.: elasticsearch -Des.logger.level=DEBUG
+es.logger.level: INFO
+rootLogger: \${es.logger.level}, console
+logger:
+  action: DEBUG, console
+  index.search.slowlog: INFO, console
+  index.indexing.slowlog: INFO, console
+appender:
+  console:
+    type: console
+    layout:
+      type: consolePattern
+      conversionPattern: "[%d{ISO8601}][%-5p][%-25c] %m%n"
+EOF
+}
+
+nixd_run "$@"
