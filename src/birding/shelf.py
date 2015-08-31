@@ -1,3 +1,5 @@
+"""Track terms using a simple dict-like interface."""
+
 import abc
 import collections
 

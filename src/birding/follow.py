@@ -1,3 +1,5 @@
+"""Tool to follow output of birding."""
+
 from __future__ import print_function
 
 import json
@@ -7,6 +9,7 @@ from .search import SearchManager
 
 
 def follow_fd(fd):
+    """Dump each line of input to stdio."""
     for line in fd:
         try:
             if not line.strip():

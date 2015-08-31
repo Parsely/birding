@@ -1,4 +1,4 @@
-from __future__ import absolute_import, print_function
+"""Namespace of all modules in the birding package."""
 
 import logging
 
@@ -21,7 +21,7 @@ __all__ = [
 ]
 
 
-# Configure the logger. No configuration is exposed by birding itself. A
+# Configure the logger. No logger configuration is exposed by birding itself. A
 # project using birding can change the log level after importing `birding`
 # with:
 #
