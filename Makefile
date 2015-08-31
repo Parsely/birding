@@ -54,7 +54,7 @@ run: run-twitter
 
 run-twitter: birding-dev
 	@echo Running twitter command to see if OAuth established ...
-	@$(VENDOR)/opt/python2.7/bin/twitter
+	$(VENDOR)/opt/python2.7/bin/twitter
 
 run-zookeeper: vendor-kafka
 	$(DIR)/bin/zookeeper-server-start.sh $(DIR)/config/zookeeper.properties
@@ -71,9 +71,9 @@ run-elasticsearch: vendor-elasticsearch
 	$(VENDOR)/usr/bin/elasticsearch -Des.logger.level=INFO
 
 run-streamparse: $(sparse) wait-tcp-9092 wait-tcp-9200
-	@$(KAFKA_DIR)/bin/kafka-topics.sh --create --zookeeper localhost:2181 \
+	$(KAFKA_DIR)/bin/kafka-topics.sh --create --zookeeper localhost:2181 \
 		--replication-factor 1 --partitions 1 --topic tweet ; true # KAFKA-2154
-	@PATH=$(VENDOR)/opt/python2.7/bin:$(PATH) $(sparse) run
+	PATH=$(VENDOR)/opt/python2.7/bin:$(PATH) $(sparse) run
 
 run-streamparse: KAFKA_DIR := $(VENDOR)/opt/kafka
 
