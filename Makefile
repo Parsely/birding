@@ -6,7 +6,6 @@ run: Procfile
 	$(POORMAN) start
 
 docs: birding-dev
-	@touch docs/todo.rst # Force rebuild of todolist.
 	@PATH=$(VENDOR)/opt/python2.7/bin:$(PATH) $(MAKE) -C docs html
 
 .PHONY: docs

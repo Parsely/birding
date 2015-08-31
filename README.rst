@@ -1,8 +1,6 @@
 birding: public API twitter search stream
 =========================================
 
-**WORK IN PROGRESS**
-
 Overview
 --------
 

@@ -25,10 +25,7 @@ birding behavior when running locally or in production.
    tour
    production
    config
-   todo
    api
-
-This project and its documentation are works in progress. See :ref:`todo`.
 
 To discuss this project, join the `streamparse user group`_.
 

@@ -69,6 +69,8 @@ the source of streams in the topology:
 * :class:`~birding.spout.TermCycleSpout` cycles through a static list of terms.
 
 
+.. _storm-topology:
+
 Storm Topology
 --------------
 

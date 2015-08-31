@@ -10,12 +10,13 @@ The scope of the configuration file is limited to details of birding itself,
 not of Storm-related topics. Storm details are in the project topology
 definition.
 
-.. todo:: Document how to package ``birding.yml`` when :ref:`production`.
-
 When a configuration value is a Python dotted name, it is a string reference to
 the Python object to import. In general, when the value is just an object name
 without a full namespace, its assumed to be the relevant birding namespace,
 e.g. ``LRUShelf`` is assumed to be ``birding.shelf.LRUShelf``.
+
+See :ref:`production` for further discussion on configuration in production
+environments.
 
 For advanced API usage, see :func:`get_config`. The config includes an
 `Appendix` to support any additional values not known to birding, such that
