@@ -64,6 +64,9 @@ run-kafka: vendor-kafka wait-tcp-2181
 
 run-zookeeper run-kafka: DIR := $(VENDOR)/opt/kafka
 
+# Sending kafka SIGKILL is dramatic, but it does not exit if zookeeper is gone.
+run-kafka: wrapper := .Makefile.d/bin/run-then-sigkill
+
 run-streamparse: $(sparse) wait-tcp-9092
 	@$(KAFKA_DIR)/bin/kafka-topics.sh --create --zookeeper localhost:2181 \
 		--replication-factor 1 --partitions 1 --topic tweet ; true # KAFKA-2154
@@ -72,12 +75,7 @@ run-streamparse: $(sparse) wait-tcp-9092
 run-streamparse: KAFKA_DIR := $(VENDOR)/opt/kafka
 
 run-follow: birding-dev wait-tcp-9092
-	@$(wrapper) $(VENDOR)/opt/kafka/bin/kafka-console-consumer.sh \
-		--zookeeper localhost:2181 --topic tweet | \
-		$(VENDOR)/opt/python2.7/bin/python2.7 -m birding.follow
-
-# Sending kafka SIGKILL is dramatic, but it does not exit if zookeeper is gone.
-run-kafka run-follow: wrapper := .Makefile.d/bin/run-then-sigkill
+	$(VENDOR)/opt/python2.7/bin/python2.7 -m birding.follow
 
 $(sparse): .develop
 birding-dev: .develop
