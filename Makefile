@@ -16,6 +16,9 @@ flakes: pyflakes-command
 
 python = $(VENDOR)/opt/python2.7/bin/python
 
+test: develop flakes
+	$(python) setup.py nosetests --with-doctest
+
 publish: develop flakes
 	$(python) setup.py sdist --formats=bztar,zip upload -r $(PYPI_URL)
 
