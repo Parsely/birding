@@ -8,6 +8,7 @@ _build
 *.db
 *.db-journal
 /.develop
+/dist/
 .DS_Store
 *.egg
 *.egg-info

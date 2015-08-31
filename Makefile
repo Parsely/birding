@@ -14,6 +14,21 @@ docs: birding-dev
 flakes: pyflakes-command
 	@find *.py src -name '*.py' | xargs pyflakes
 
+python = $(VENDOR)/opt/python2.7/bin/python
+
+publish: develop flakes
+	$(python) setup.py sdist --formats=bztar,zip upload -r $(PYPI_URL)
+
+publish-readme: develop # Unless publishing, use this to update PyPI w/README.
+	$(python) setup.py register -r $(PYPI_URL)
+
+publish-test: develop flakes
+	$(python) setup.py register -r $(PYPI_URL)
+	$(python) setup.py sdist --formats=bztar,zip upload -r $(PYPI_URL)
+
+publish publish-readme: PYPI_URL = https://pypi.python.org/pypi
+publish-test: PYPI_URL = https://testpypi.python.org/pypi
+
 ## Run Recipes w/Automated Requirements
 
 include .Makefile.d/procfile.mk
