@@ -5,7 +5,14 @@ import itertools
 
 from streamparse.spout import Spout
 
-from .config import get_config
+from .config import get_config, import_name
+
+
+def DispatchSpout(*a, **kw):
+    """Factory to dispatch spout class based on config."""
+    spout_class_name = get_config()['spout']
+    spout_class = import_name(spout_class_name, default_ns='birding.spout')
+    return spout_class(*a, **kw)
 
 
 class TermCycleSpout(Spout):

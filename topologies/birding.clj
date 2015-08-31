@@ -7,7 +7,8 @@
     ;; spout configuration
     {"term-spout" (python-spout-spec
           options
-          "birding.spout.TermCycleSpout"
+          ; Dispatch class based on birding.yml.
+          "birding.spout.DispatchSpout"
           ["term" "timestamp"]
           )
     }

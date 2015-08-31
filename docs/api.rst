@@ -20,6 +20,8 @@ API
 
 .. module:: birding.spout
 
+.. autofunction:: DispatchSpout()
+
 .. autoclass:: TermCycleSpout()
    :members:
 
