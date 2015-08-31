@@ -26,7 +26,7 @@ def follow_topic(hosts, name, retry_interval=1):
         try:
             client = KafkaClient(hosts=hosts)
             topic = client.topics[name]
-            consumer = topic.get_simple_consumer()
+            consumer = topic.get_simple_consumer(reset_offset_on_start=True)
         except Exception as e:
             if not should_try_kafka_again(e):
                 raise
