@@ -1,6 +1,7 @@
 #!/bin/bash
 # Download and unpack kafka.
 
+. $NIXD_LIB/apache.sh
 . $NIXD_LIB/java.sh
 
 SCALA_VERSION=2.10
@@ -26,12 +27,6 @@ resources() {
 
 pretest() {
     check_java_version
-}
-
-locate_apache_mirror() {
-    curl https://www.apache.org/dyn/closer.cgi?path=$1 |\
-        grep -i -A 10 'we suggest the following' |\
-        grep href | head -1 | cut -f 2 -d '"'
 }
 
 install() {
