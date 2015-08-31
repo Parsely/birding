@@ -34,6 +34,9 @@ API
 .. autoclass:: TwitterLookupBolt()
    :members:
 
+.. autoclass:: ElasticsearchIndexBolt()
+   :members:
+
 .. autoclass:: ResultTopicBolt()
    :members:
 

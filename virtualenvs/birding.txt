@@ -1,4 +1,5 @@
 # Update setup.py install_requires when editing this list.
+elasticsearch
 pykafka
 pyyaml
 repoze.lru

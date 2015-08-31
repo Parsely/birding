@@ -28,6 +28,13 @@
           ["term" "timestamp" "lookup_result"]
           :p 2
           )
+     "elasticsearch-index-bolt" (python-bolt-spec
+          options
+          {"lookup-bolt" :shuffle}
+          "birding.bolt.ElasticsearchIndexBolt"
+          []
+          :p 1
+          )
      "result-topic-bolt" (python-bolt-spec
           options
           {"lookup-bolt" :shuffle}

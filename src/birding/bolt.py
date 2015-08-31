@@ -62,6 +62,35 @@ class TwitterLookupBolt(Bolt):
         self.emit([term, timestamp, lookup_result])
 
 
+class ElasticsearchIndexBolt(Bolt):
+    def initialize(self, conf, ctx):
+        """Initialization steps:
+
+        1. Prepare elasticsearch connection, including details for indexing.
+        """
+        config = get_config()['ElasticsearchIndexBolt']
+        elasticsearch_class = import_name(config['elasticsearch_class'])
+        self.es = elasticsearch_class(**config['elasticsearch_init'])
+        self.index = config['index']
+        self.doc_type = config['doc_type']
+
+    def process(self, tup):
+        """Process steps:
+
+        1. Index third positional value from input to elasticsearch.
+        """
+        self.es.bulk(
+            self.generate_bulk_body(tup.values[2]),
+            index=self.index,
+            doc_type=self.doc_type)
+
+    @staticmethod
+    def generate_bulk_body(statuses):
+        for status in statuses:
+            yield {'index': {'_id': status['id_str']}}
+            yield status
+
+
 class ResultTopicBolt(Bolt):
     def initialize(self, conf, ctx):
         """Initialization steps:

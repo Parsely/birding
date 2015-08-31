@@ -35,6 +35,13 @@ Defaults::
     TwitterSearchBolt:
       shelf: LRUShelf # dotted name of shelf class
       shelf_parameters: {} # keyword arguments passed to shelf constructor
+    ElasticsearchIndexBolt:
+      elasticsearch_class: elasticsearch.Elasticsearch # dotted name of class
+      elasticsearch_init:
+        hosts:
+        - localhost: 9200
+      index: tweet
+      doc_type: tweet
     ResultTopicBolt:
       hosts: 127.0.0.1:9092 # comma-separated list of hosts
       topic: tweet
@@ -65,6 +72,11 @@ SCHEMA = tv.SchemaMapping().of(
     TwitterSearchBolt = tv.SchemaMapping().of(
         shelf = tv.String(),
         shelf_parameters = tv.StrMapping().of(tv.Passthrough())),
+    ElasticsearchIndexBolt = tv.SchemaMapping().of(
+        elasticsearch_class = tv.String(),
+        elasticsearch_init = tv.StrMapping().of(tv.Passthrough()),
+        index = tv.String(),
+        doc_type = tv.String()),
     ResultTopicBolt = tv.SchemaMapping().of(
         hosts = tv.String(),
         topic = tv.String()),

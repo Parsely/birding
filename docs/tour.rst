@@ -54,7 +54,10 @@ Storm Bolts
 With APIs in place to do the work, Bolt_ classes provide Storm components:
 
 * :class:`~birding.bolt.TwitterSearchBolt` searches the input terms.
-* :class:`~birding.bolt.TwitterLookupBolt` expands search results into full tweets.
+* :class:`~birding.bolt.TwitterLookupBolt` expands search results into full
+  tweets.
+* :class:`~birding.bolt.ElasticsearchIndexBolt` indexes the lookup results in
+  elasticsearch.
 * :class:`~birding.bolt.ResultTopicBolt` publishes the lookup results to Kafka.
 
 

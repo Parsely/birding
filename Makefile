@@ -70,7 +70,7 @@ run-kafka: wrapper := .Makefile.d/bin/run-then-sigkill
 run-elasticsearch: vendor-elasticsearch
 	$(VENDOR)/usr/bin/elasticsearch -Des.logger.level=INFO
 
-run-streamparse: $(sparse) wait-tcp-9092
+run-streamparse: $(sparse) wait-tcp-9092 wait-tcp-9200
 	@$(KAFKA_DIR)/bin/kafka-topics.sh --create --zookeeper localhost:2181 \
 		--replication-factor 1 --partitions 1 --topic tweet ; true # KAFKA-2154
 	@PATH=$(VENDOR)/opt/python2.7/bin:$(PATH) $(sparse) run

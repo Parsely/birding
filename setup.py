@@ -40,6 +40,7 @@ classifiers = [
 
 # Update virtualenvs/birding.txt when editing this list.
 install_requires = [
+    'elasticsearch',
     'pykafka',
     'pyyaml',
     'repoze.lru',
