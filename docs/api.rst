@@ -51,3 +51,6 @@ API
 
 .. autoclass:: LRUShelf
    :members:
+
+.. autoclass:: ElasticsearchShelf
+   :members:

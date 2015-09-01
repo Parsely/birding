@@ -3,6 +3,7 @@
 import abc
 import collections
 
+import elasticsearch
 from repoze.lru import LRUCache
 
 
@@ -72,3 +73,43 @@ class LRUShelf(Shelf):
 
     def clear(self):
         self.store.clear()
+
+
+class ElasticsearchShelf(Shelf):
+    """A shelf implemented using an elasticsearch index."""
+
+    def __init__(self, index='shelf', doc_type='shelf', **elasticsearch_init):
+        self.es = elasticsearch.Elasticsearch(**elasticsearch_init)
+        self.index_client = elasticsearch.client.IndicesClient(self.es)
+        self.index = index
+        self.doc_type = doc_type
+
+    def getitem(self, key):
+        try:
+            doc = self.es.get(index=self.index, doc_type=self.doc_type, id=key)
+        except elasticsearch.exceptions.NotFoundError:
+            raise KeyError(key)
+
+        if not doc:
+            raise KeyError(key)
+
+        try:
+            value = doc['_source']['value']
+        except KeyError:
+            raise KeyError('{} (malformed data)'.format(key))
+
+        return value
+
+    def setitem(self, key, value):
+        self.es.index(
+            index=self.index,
+            doc_type=self.doc_type,
+            id=key,
+            body={'value': value},
+            refresh=True)
+
+    def delitem(self, key):
+        self.es.delete(index=self.index, doc_type=self.doc_type, id=key)
+
+    def clear(self):
+        self.index_client.delete(self.index)
