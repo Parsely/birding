@@ -18,7 +18,8 @@ class TwitterSearchBolt(Bolt):
         """
         self.manager = SearchManager(Twitter.from_oauth_file())
         config = get_config()['TwitterSearchBolt']
-        shelf_class = import_name(config['shelf_class'], default_ns='birding.shelf')
+        shelf_class = import_name(
+            config['shelf_class'], default_ns='birding.shelf')
         self.term_shelf = shelf_class(**config['shelf_init'])
 
     def process(self, tup):
@@ -96,6 +97,7 @@ class ResultTopicBolt(Bolt):
 
         1. Connect to Kafka.
         2. Prepare Kafka producer for `tweet` topic.
+        3. Prepare to track tweets published to topic, to avoid redundant data.
         """
         config = get_config()['ResultTopicBolt']
         kafka_class = import_name(config['kafka_class'])
@@ -103,12 +105,30 @@ class ResultTopicBolt(Bolt):
         self.topic = self.client.topics[config['topic']]
         self.producer = self.topic.get_producer()
 
+        shelf_class = import_name(
+            config['shelf_class'], default_ns='birding.shelf')
+        shelf_init = config['shelf_init']
+
+        # Use own default index value while still allowing user config.
+        shelf_init['index'] = shelf_init.get('index', 'pre_kafka_shelf')
+        self.tweet_shelf = shelf_class(**shelf_init)
+
     def process(self, tup):
         """Process steps:
 
         1. Stream third positional value from input into Kafka topic.
         """
+        status_seq = self.iter_using_shelf(tup.values[2], self.tweet_shelf)
         # This could be more efficient by passing the result from twitter
         # straight through to the producer, instead of deserializing and
         # reserializing json.
-        self.producer.produce(json.dumps(status) for status in tup.values[2])
+        self.producer.produce(json.dumps(status) for status in status_seq)
+
+    @staticmethod
+    def iter_using_shelf(statuses, shelf):
+        for status in statuses:
+            id_str = status['id_str']
+            if id_str in shelf:
+                continue
+            yield status
+            shelf[id_str] = None

@@ -49,6 +49,8 @@ Defaults::
       kafka_init:
         hosts: 127.0.0.1:9092 # comma-separated list of hosts
       topic: tweet
+      shelf_class: ElasticsearchShelf
+      shelf_init: {}
     Appendix: {}
 
 """
@@ -84,7 +86,9 @@ SCHEMA = tv.SchemaMapping().of(
     ResultTopicBolt = tv.SchemaMapping().of(
         kafka_class = tv.String(),
         kafka_init = tv.StrMapping().of(tv.Passthrough()),
-        topic = tv.String()),
+        topic = tv.String(),
+        shelf_class = tv.String(),
+        shelf_init = tv.StrMapping().of(tv.Passthrough())),
     Appendix = tv.Passthrough())
 
 
