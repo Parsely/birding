@@ -28,7 +28,7 @@ needs to define additional values.
 
 Defaults::
 
-    spout: TermCycleSpout
+    Spout: TermCycleSpout
     TermCycleSpout:
       terms:
       - real-time analytics
@@ -70,7 +70,7 @@ BIRDING_CONF = os.environ.get('BIRDING_CONF', BIRDING_CONF_DEFAULT)
 
 
 SCHEMA = tv.SchemaMapping().of(
-    spout = tv.String(),
+    Spout = tv.String(),
     TermCycleSpout = tv.SchemaMapping().of(
         terms = tv.List().of(tv.String())),
     TwitterSearchBolt = tv.SchemaMapping().of(
