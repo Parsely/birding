@@ -13,9 +13,12 @@ ARCHIVE=$UNPACKED.tgz
 MD5SUM=16cbbdf77c5e2e17aa469f4430ff51a4
 
 DESTINATION=$NIXD_OPT/kafka
+CONFIGURATION_PATH=$DESTINATION/config/birding.properties
+KAFKA_DATA_PATH=$NIXD_VAR/lib/kafka
 
 check() {
     nixd_ls $DESTINATION
+    nixd_run_once
 }
 
 resources() {
@@ -33,6 +36,31 @@ install() {
     rm -fr $UNPACKED $DESTINATION
     tar -xzf $ARCHIVE
     mv -v $UNPACKED $DESTINATION
+    generate_server_properties > $CONFIGURATION_PATH
+}
+
+generate_server_properties() {
+    # http://kafka.apache.org/07/configuration.html
+
+    cat -<<EOF
+broker.id=0
+listeners=PLAINTEXT://:9092
+port=9092
+num.network.threads=3
+num.io.threads=8
+socket.send.buffer.bytes=102400
+socket.receive.buffer.bytes=102400
+socket.request.max.bytes=104857600
+log.dirs=$KAFKA_DATA_PATH
+num.partitions=1
+num.recovery.threads.per.data.dir=1
+log.retention.hours=168
+log.segment.bytes=1073741824
+log.retention.check.interval.ms=300000
+log.cleaner.enable=false
+zookeeper.connect=localhost:2181
+zookeeper.connection.timeout.ms=6000
+EOF
 }
 
 nixd_run "$@"

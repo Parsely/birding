@@ -13,6 +13,10 @@ docs: birding-dev
 flakes: pyflakes-command
 	@find *.py src -name '*.py' | xargs pyflakes
 
+clean-data:
+	rm -fr $(VENDOR)/var/lib/kafka
+	rm -fr $(VENDOR)/var/lib/elasticsearch
+
 python = $(VENDOR)/opt/python2.7/bin/python
 
 test: develop flakes
@@ -68,7 +72,8 @@ run-zookeeper: vendor-kafka
 	$(DIR)/bin/zookeeper-server-start.sh $(DIR)/config/zookeeper.properties
 
 run-kafka: vendor-kafka wait-tcp-2181
-	$(wrapper) $(DIR)/bin/kafka-server-start.sh $(DIR)/config/server.properties
+	$(wrapper) $(DIR)/bin/kafka-server-start.sh \
+		$(DIR)/config/birding.properties
 
 run-zookeeper run-kafka: DIR := $(VENDOR)/opt/kafka
 
