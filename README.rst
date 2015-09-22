@@ -13,6 +13,9 @@ Dependencies are fully automated; in a birding checkout, run with::
 
     make run
 
+Using `make run` will pick up `birding.yml` as the project configuration file,
+if it exists in the root directory next to the `Makefile`.
+
 See the docs (below) for a full discussion of birding, including how to use
 birding in an existing streamparse project.
 

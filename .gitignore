@@ -2,6 +2,7 @@
 *~
 \#*
 *.aux
+birding.yml
 _build
 *.codekit
 .coverage
@@ -17,6 +18,7 @@ _build
 .ipynb_checkpoints
 *.lock
 *.log
+*.log.[0-9]*
 __MACOSX
 *.out
 *.pdf

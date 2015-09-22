@@ -33,11 +33,19 @@ publish-test: PYPI_URL = https://testpypi.python.org/pypi
 
 ## Run Recipes w/Automated Requirements
 
+include .Makefile.d/path.mk
 include .Makefile.d/procfile.mk
 include .Makefile.d/vendor.mk
 include .Makefile.d/wait.mk
 
 sparse := $(VENDOR)/opt/python2.7/bin/sparse
+
+# If BIRDING_CONF is unset, use birding.yml in the root directory if it exists.
+ifeq ("$(BIRDING_CONF)","")
+ifneq ("$(wildcard $(PROJECT_ROOT)/birding.yml)","")
+export BIRDING_CONF=$(PROJECT_ROOT)/birding.yml
+endif
+endif
 
 Procfile: proc proc-zookeeper proc-kafka proc-streamparse proc-follow \
 	proc-elasticsearch
