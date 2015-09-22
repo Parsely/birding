@@ -1,12 +1,30 @@
 """Storm Bolt classes."""
 
+from __future__ import print_function
+
+import functools
 import json
+import sys
 
 from streamparse.bolt import Bolt
 
 from .config import get_config, import_name
 from .search import SearchManager
 from .twitter_api import Twitter
+
+
+def fault_barrier(fn):
+    """Method decorator to catch and log errors, then send fail message."""
+    @functools.wraps(fn)
+    def process(self, tup):
+        try:
+            return fn(self, tup)
+        except Exception as e:
+            if isinstance(e, KeyboardInterrupt):
+                return
+            print(str(e), file=sys.stderr)
+            self.fail(tup)
+    return process
 
 
 class TwitterSearchBolt(Bolt):
@@ -22,6 +40,7 @@ class TwitterSearchBolt(Bolt):
             config['shelf_class'], default_ns='birding.shelf')
         self.term_shelf = shelf_class(**config['shelf_init'])
 
+    @fault_barrier
     def process(self, tup):
         """Process steps:
 
@@ -47,6 +66,7 @@ class TwitterLookupBolt(Bolt):
         """
         self.manager = SearchManager(Twitter.from_oauth_file())
 
+    @fault_barrier
     def process(self, tup):
         """Process steps:
 
@@ -74,6 +94,7 @@ class ElasticsearchIndexBolt(Bolt):
         self.index = config['index']
         self.doc_type = config['doc_type']
 
+    @fault_barrier
     def process(self, tup):
         """Process steps:
 
@@ -113,6 +134,7 @@ class ResultTopicBolt(Bolt):
         shelf_init['index'] = shelf_init.get('index', 'pre_kafka_shelf')
         self.tweet_shelf = shelf_class(**shelf_init)
 
+    @fault_barrier
     def process(self, tup):
         """Process steps:
 
