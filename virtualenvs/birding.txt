@@ -1,9 +1,9 @@
 # Update setup.py install_requires when editing this list.
-elasticsearch
-pykafka
-pyyaml
-repoze.lru
-six
-streamparse
-travesty
-twitter
+elasticsearch==1.7.0
+pykafka==1.1.0
+pyyaml==3.11
+repoze.lru==0.6
+six==1.9.0
+streamparse==2.0.2
+travesty==0.1.1
+twitter==1.17.0
