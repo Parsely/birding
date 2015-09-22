@@ -30,6 +30,7 @@ resources() {
 
 pretest() {
     check_java_version
+    nixd check_for_program lein
 }
 
 install() {
