@@ -2,6 +2,7 @@
 
 import abc
 import collections
+import time
 
 import elasticsearch
 from repoze.lru import LRUCache
@@ -34,11 +35,27 @@ class Shelf(collections.MutableMapping):
     def clear(self):
         """Remove all items from the shelf."""
 
+    def unpack(self, key, value):
+        """Unpack value from ``getitem``.
+
+        This is useful for `Shelf` implementations which require metadata be
+        stored with the shelved values, in which case ``pack`` should implement
+        the inverse operation. By default, the value is simply passed through
+        without modification. The ``unpack`` implementation is called on
+        ``__getitem__`` and therefore can raise `KeyError` if packed metadata
+        indicates that a value is invalid.
+        """
+        return value
+
+    def pack(self, key, value):
+        """Pack value given to ``setitem``, inverse of ``unpack``."""
+        return value
+
     def __getitem__(self, key):
-        return self.getitem(self.__keytransform__(key))
+        return self.unpack(key, self.getitem(self.__keytransform__(key)))
 
     def __setitem__(self, key, value):
-        self.setitem(self.__keytransform__(key), value)
+        self.setitem(self.__keytransform__(key), self.pack(key, value))
 
     def __delitem__(self, key):
         self.delitem(self.__keytransform__(key))
@@ -51,6 +68,26 @@ class Shelf(collections.MutableMapping):
 
     def __len__(self):
         raise NotImplementedError('Shelf instances do not support iteration.')
+
+
+class FreshPacker(object):
+    #: Values are no longer fresh after this value, in seconds.
+    expire_after = 5 * 60
+
+    def unpack(self, key, value):
+        value, freshness = value
+        if not self.is_fresh(freshness):
+            raise KeyError('{} (stale)'.format(key))
+        return value
+
+    def pack(self, key, value):
+        return value, self.freshness()
+
+    def freshness(self):
+        return time.time()
+
+    def is_fresh(self, freshness):
+        return self.freshness() - freshness <= self.expire_after
 
 
 class LRUShelf(Shelf):
@@ -73,6 +110,10 @@ class LRUShelf(Shelf):
 
     def clear(self):
         self.store.clear()
+
+
+class FreshLRUShelf(FreshPacker, LRUShelf):
+    pass
 
 
 class ElasticsearchShelf(Shelf):
@@ -113,3 +154,7 @@ class ElasticsearchShelf(Shelf):
 
     def clear(self):
         self.index_client.delete(self.index)
+
+
+class FreshElasticsearchShelf(FreshPacker, ElasticsearchShelf):
+    pass

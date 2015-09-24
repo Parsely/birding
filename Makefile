@@ -20,6 +20,9 @@ clean-data:
 
 python = $(VENDOR)/opt/python2.7/bin/python
 
+python: develop
+	@$(python)
+
 test: develop flakes
 	$(python) setup.py nosetests --with-doctest
 
