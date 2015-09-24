@@ -10,6 +10,7 @@
           ; Dispatch class based on birding.yml.
           "birding.spout.DispatchSpout"
           ["term" "timestamp"]
+          :conf {"topology.max.spout.pending", 8}
           )
     }
     ;; bolt configuration
