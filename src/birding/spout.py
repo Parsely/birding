@@ -15,7 +15,33 @@ def DispatchSpout(*a, **kw):
     return spout_class(*a, **kw)
 
 
-class TermCycleSpout(Spout):
+class TermMethods(object):
+    @staticmethod
+    def pack_tup_id(term, timestamp):
+        """Pack term, timestamp into a tuple ID suitable for Storm.
+
+        Example:
+
+        >>> TermMethods.pack_tup_id('search it!', '2015-09-24T14:39:53.429183')
+        'search it! 2015-09-24T14:39:53.429183'
+        >>>
+        """
+        return '{} {}'.format(term, timestamp)
+
+    @staticmethod
+    def parse_tup_id(tup_id):
+        """Parse a `pack_tup_id`-packed tuple ID into term, timestamp.
+
+        Example:
+
+        >>> TermMethods.parse_tup_id('search it! 2015-09-24T14:39:53.429183')
+        ('search it!', '2015-09-24T14:39:53.429183')
+        >>>
+        """
+        return tuple(tup_id.rsplit(' ', 1))
+
+
+class TermCycleSpout(Spout, TermMethods):
     def initialize(self, stormconf, context):
         """Initialization steps:
 
@@ -31,4 +57,4 @@ class TermCycleSpout(Spout):
         """
         term = next(self.term_seq)
         timestamp = datetime.datetime.utcnow().isoformat()
-        self.emit([term, timestamp])
+        self.emit([term, timestamp], tup_id=self.pack_tup_id(term, timestamp))
