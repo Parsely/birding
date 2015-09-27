@@ -7,8 +7,26 @@ import time
 import elasticsearch
 from repoze.lru import LRUCache
 
+from .config import import_name
+
 
 UNSET = object()
+
+
+def shelf_from_config(config, **default_init):
+    """Get a `Shelf` instance dynamically based on config.
+
+    `config` is a dictionary containing ``shelf_*`` keys as defined in
+    ``birding.config``.
+    """
+    shelf_cls = import_name(config['shelf_class'], default_ns='birding.shelf')
+    init = {}
+    init.update(default_init)
+    init.update(config['shelf_init'])
+    shelf = shelf_cls(**init)
+    if hasattr(shelf, 'set_expiration') and 'shelf_expiration' in config:
+        shelf.set_expiration(config['shelf_expiration'])
+    return shelf
 
 
 class Shelf(collections.MutableMapping):
@@ -71,22 +89,34 @@ class Shelf(collections.MutableMapping):
 
 
 class FreshPacker(object):
+    """Mixin for pack/unpack implementation to expire shelf content."""
+
     #: Values are no longer fresh after this value, in seconds.
     expire_after = 5 * 60
 
     def unpack(self, key, value):
+        """Unpack and return value only if it is fresh."""
         value, freshness = value
         if not self.is_fresh(freshness):
             raise KeyError('{} (stale)'.format(key))
         return value
 
     def pack(self, key, value):
+        """Pack value with metadata on its freshness."""
         return value, self.freshness()
 
+    def set_expiration(self, expire_after):
+        """Set a new expiration for freshness of all unpacked values."""
+        self.expire_after = expire_after
+
     def freshness(self):
+        """Clock function to use for freshness packing/unpacking."""
         return time.time()
 
     def is_fresh(self, freshness):
+        """Return False if given freshness value has expired, else True."""
+        if self.expire_after is None:
+            return True
         return self.freshness() - freshness <= self.expire_after
 
 
@@ -113,7 +143,7 @@ class LRUShelf(Shelf):
 
 
 class FreshLRUShelf(FreshPacker, LRUShelf):
-    pass
+    """A Least-Recently Used shelf which expires values."""
 
 
 class ElasticsearchShelf(Shelf):
@@ -157,4 +187,4 @@ class ElasticsearchShelf(Shelf):
 
 
 class FreshElasticsearchShelf(FreshPacker, ElasticsearchShelf):
-    pass
+    """An shelf implementation with elasticsearch which expires values."""

@@ -35,8 +35,9 @@ Defaults::
       - apache storm
       - pypi
     TwitterSearchBolt:
-      shelf_class: LRUShelf
+      shelf_class: FreshLRUShelf
       shelf_init: {}
+      shelf_expiration: 300
     ElasticsearchIndexBolt:
       elasticsearch_class: elasticsearch.Elasticsearch
       elasticsearch_init:
@@ -51,6 +52,7 @@ Defaults::
       topic: tweet
       shelf_class: ElasticsearchShelf
       shelf_init: {}
+      shelf_expiration: null
     Appendix: {}
 
 """
@@ -77,7 +79,8 @@ SCHEMA = tv.SchemaMapping().of(
         terms = tv.List().of(tv.String())),
     TwitterSearchBolt = tv.SchemaMapping().of(
         shelf_class = tv.String(),
-        shelf_init = tv.StrMapping().of(tv.Passthrough())),
+        shelf_init = tv.StrMapping().of(tv.Passthrough()),
+        shelf_expiration = tv.Optional(tv.Int())),
     ElasticsearchIndexBolt = tv.SchemaMapping().of(
         elasticsearch_class = tv.String(),
         elasticsearch_init = tv.StrMapping().of(tv.Passthrough()),
@@ -88,7 +91,8 @@ SCHEMA = tv.SchemaMapping().of(
         kafka_init = tv.StrMapping().of(tv.Passthrough()),
         topic = tv.String(),
         shelf_class = tv.String(),
-        shelf_init = tv.StrMapping().of(tv.Passthrough())),
+        shelf_init = tv.StrMapping().of(tv.Passthrough()),
+        shelf_expiration = tv.Optional(tv.Int())),
     Appendix = tv.Passthrough())
 
 
@@ -252,8 +256,10 @@ def import_name(name, default_ns=None):
 
 
 if __name__ == '__main__':
-    import doctest
     import pprint
+    import sys
 
-    doctest.testmod()
-    pprint.pprint(get_config())
+    if '--yaml' in sys.argv:
+        print(yaml.safe_dump(get_config(), default_flow_style=False))
+    else:
+        pprint.pprint(get_config())

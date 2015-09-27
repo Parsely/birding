@@ -26,6 +26,14 @@ python: develop
 test: develop flakes
 	$(python) setup.py nosetests --with-doctest
 
+# Dump birding.yml from birding's resulting config dict.
+config:
+	@$(python) -m birding.config --yaml
+
+# Debug tool to view birding's resulting config dict.
+config-dict:
+	@$(python) -m birding.config
+
 publish: develop flakes
 	$(python) setup.py sdist --formats=bztar,zip upload -r $(PYPI_URL)
 

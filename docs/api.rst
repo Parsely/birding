@@ -49,8 +49,17 @@ API
 .. autoclass:: Shelf
    :members:
 
+.. autoclass:: FreshPacker
+   :members:
+
 .. autoclass:: LRUShelf
    :members:
 
+.. autoclass:: FreshLRUShelf
+   :members:
+
 .. autoclass:: ElasticsearchShelf
+   :members:
+
+.. autoclass:: FreshElasticsearchShelf
    :members:

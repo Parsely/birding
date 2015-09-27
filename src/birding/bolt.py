@@ -10,6 +10,7 @@ from streamparse.bolt import Bolt
 
 from .config import get_config, import_name
 from .search import SearchManager
+from .shelf import shelf_from_config
 from .twitter_api import Twitter
 
 
@@ -36,9 +37,7 @@ class TwitterSearchBolt(Bolt):
         """
         self.manager = SearchManager(Twitter.from_oauth_file())
         config = get_config()['TwitterSearchBolt']
-        shelf_class = import_name(
-            config['shelf_class'], default_ns='birding.shelf')
-        self.term_shelf = shelf_class(**config['shelf_init'])
+        self.term_shelf = shelf_from_config(config)
 
     @fault_barrier
     def process(self, tup):
@@ -126,13 +125,8 @@ class ResultTopicBolt(Bolt):
         self.topic = self.client.topics[config['topic']]
         self.producer = self.topic.get_producer()
 
-        shelf_class = import_name(
-            config['shelf_class'], default_ns='birding.shelf')
-        shelf_init = config['shelf_init']
-
         # Use own default index value while still allowing user config.
-        shelf_init['index'] = shelf_init.get('index', 'pre_kafka_shelf')
-        self.tweet_shelf = shelf_class(**shelf_init)
+        self.tweet_shelf = shelf_from_config(config, index='pre_kafka_shelf')
 
     @fault_barrier
     def process(self, tup):
