@@ -3,18 +3,6 @@
 API
 ===
 
-.. module:: birding.twitter
-
-.. autoclass:: Twitter
-   :members:
-
-
-.. module:: birding.gnip
-
-.. autoclass:: Gnip
-   :members:
-
-
 .. module:: birding.search
 
 .. autofunction:: search_manager_from_config()
@@ -22,10 +10,22 @@ API
 .. autoclass:: SearchManager
    :members:
 
+
+.. module:: birding.twitter
+
+.. autoclass:: Twitter
+   :members:
+
 .. autoclass:: TwitterSearchManager
    :members:
 
 .. autofunction:: TwitterSearchManagerFromOAuth()
+
+
+.. module:: birding.gnip
+
+.. autoclass:: Gnip
+   :members:
 
 .. autoclass:: GnipSearchManager
    :members:

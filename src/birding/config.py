@@ -35,7 +35,7 @@ Defaults::
       - apache storm
       - pypi
     SearchManager:
-      class: TwitterSearchManagerFromOAuth
+      class: birding.twitter.TwitterSearchManagerFromOAuth
       init: {}
     TwitterSearchBolt:
       shelf_class: FreshLRUShelf
