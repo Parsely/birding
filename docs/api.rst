@@ -9,6 +9,12 @@ API
    :members:
 
 
+.. module:: birding.gnip
+
+.. autoclass:: Gnip
+   :members:
+
+
 .. module:: birding.search
 
 .. autofunction:: search_manager_from_config()
@@ -20,6 +26,9 @@ API
    :members:
 
 .. autofunction:: TwitterSearchManagerFromOAuth()
+
+.. autoclass:: GnipSearchManager
+   :members:
 
 
 .. Use ClassName() to remove __init__ function signature from autoclass, as

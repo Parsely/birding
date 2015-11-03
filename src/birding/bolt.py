@@ -112,7 +112,7 @@ class ElasticsearchIndexBolt(Bolt):
     @staticmethod
     def generate_bulk_body(statuses):
         for status in statuses:
-            yield {'index': {'_id': status['id_str']}}
+            yield {'index': {'_id': str(status['id'])}}
             yield status
 
 
@@ -148,7 +148,7 @@ class ResultTopicBolt(Bolt):
     @staticmethod
     def iter_using_shelf(statuses, shelf):
         for status in statuses:
-            id_str = status['id_str']
+            id_str = str(status['id'])
             if id_str in shelf:
                 continue
             yield status
