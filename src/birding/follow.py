@@ -11,7 +11,7 @@ from time import sleep
 from pykafka.exceptions import KafkaException
 
 from .config import get_config, import_name
-from .search import SearchManager
+from .search import TwitterSearchManager
 
 
 # Force unicode stdio, avoid ASCII encoding errors.
@@ -75,7 +75,7 @@ def load(message):
 
 def dump(*statuses):
     try:
-        print(SearchManager.dump(statuses))
+        print(TwitterSearchManager.dump(statuses))
         print('')
     except UnicodeEncodeError as e:
         print(str(e), file=sys.stderr)

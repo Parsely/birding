@@ -40,9 +40,9 @@ Search Manager
 --------------
 
 It is useful to solve the problem itself before being concerned with details
-about the topology. birding's :class:`~birding.search.SearchManager` composes
-the `Twitter` object into higher-level method signatures which perform the
-processing steps needed for the given :ref:`topology`. A full interaction
+about the topology. birding's :class:`~birding.search.TwitterSearchManager`
+composes the `Twitter` object into higher-level method signatures which perform
+the processing steps needed for the given :ref:`topology`. A full interaction
 before applying Storm looks like this (see ``In[2]``):
 
 * `Simple Simulated Stream <https://github.com/Parsely/birding/blob/master/docs/Simple%20Simulated%20Stream.ipynb>`_

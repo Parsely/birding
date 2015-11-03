@@ -14,6 +14,9 @@ API
 .. autoclass:: SearchManager
    :members:
 
+.. autoclass:: TwitterSearchManager
+   :members:
+
 
 .. Use ClassName() to remove __init__ function signature from autoclass, as
    component classes are not instantiated directly.

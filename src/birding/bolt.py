@@ -9,7 +9,7 @@ import sys
 from streamparse.bolt import Bolt
 
 from .config import get_config, import_name
-from .search import SearchManager
+from .search import TwitterSearchManager
 from .shelf import shelf_from_config
 from .twitter_api import Twitter
 
@@ -35,7 +35,7 @@ class TwitterSearchBolt(Bolt):
         1. Prepare :class:`~birding.twitter_api.Twitter` object w/OAuth file.
         2. Prepare to track searched terms as to avoid redundant searches.
         """
-        self.manager = SearchManager(Twitter.from_oauth_file())
+        self.manager = TwitterSearchManager(Twitter.from_oauth_file())
         config = get_config()['TwitterSearchBolt']
         self.term_shelf = shelf_from_config(config)
 
@@ -63,7 +63,7 @@ class TwitterLookupBolt(Bolt):
 
         1. Prepare :class:`~birding.twitter_api.Twitter` object w/OAuth file.
         """
-        self.manager = SearchManager(Twitter.from_oauth_file())
+        self.manager = TwitterSearchManager(Twitter.from_oauth_file())
 
     @fault_barrier
     def process(self, tup):

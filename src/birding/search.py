@@ -1,9 +1,32 @@
-"""Search twitter. Get tweets."""
+"""Search. Get tweets."""
 
 import textwrap
+from abc import ABCMeta, abstractmethod
 
 
 class SearchManager(object):
+    """Abstract base class for service object to search for tweets."""
+
+    __metaclass__ = ABCMeta
+
+    @abstractmethod
+    def search(self, q=None, **kw):
+        """Search for ``q``, return results directly from source."""
+
+    @abstractmethod
+    def lookup_search_result(self, result, **kw):
+        """Perform :meth:`lookup` on return value of :meth:`search`."""
+
+    @abstractmethod
+    def lookup(self, id_list, **kw):
+        """Lookup list of statuses, return results directly from source.
+
+        Input can be any sequence of numeric or string values representing
+        status IDs.
+        """
+
+
+class TwitterSearchManager(SearchManager):
     """Service object to provide fully-hydrated tweets given a search query."""
 
     def __init__(self, twitter):
