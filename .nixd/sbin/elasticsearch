@@ -37,6 +37,7 @@ install() {
     rm -fr $UNPACKED $DESTINATION
     tar -xzf $ARCHIVE
     mv -v $UNPACKED $DESTINATION
+    mkdir -p $BIN
     cd $BIN
     ln -sf $DESTINATION/bin/$EXE_BASENAME $EXE_BASENAME
     generate_elasticsearch_yml > $ES_YML
