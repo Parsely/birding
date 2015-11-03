@@ -3,6 +3,23 @@
 import textwrap
 from abc import ABCMeta, abstractmethod
 
+from .config import import_name
+from .twitter_api import Twitter
+
+
+def search_manager_from_config(config, **default_init):
+    """Get a `SearchManager` instance dynamically based on config.
+
+    `config` is a dictionary containing ``class`` and ``init`` keys as defined
+    in :mod:`birding.config`.
+    """
+    manager_cls = import_name(config['class'], default_ns='birding.search')
+    init = {}
+    init.update(default_init)
+    init.update(config['init'])
+    manager = manager_cls(**init)
+    return manager
+
 
 class SearchManager(object):
     """Abstract base class for service object to search for tweets."""
@@ -76,3 +93,12 @@ class TwitterSearchManager(SearchManager):
                 screen_name=status['user']['screen_name'],
                 text=status['text']))
         return u'\n\n'.join(status_str_list)
+
+
+def TwitterSearchManagerFromOAuth(*a, **kw):
+    """Build :class:`TwitterSearchManager` from user OAuth file.
+
+    Arguments are passed to
+    :meth:`birding.twitter_api.Twitter.from_oauth_file`.
+    """
+    return TwitterSearchManager(Twitter.from_oauth_file(*a, **kw))

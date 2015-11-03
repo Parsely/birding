@@ -9,9 +9,8 @@ import sys
 from streamparse.bolt import Bolt
 
 from .config import get_config, import_name
-from .search import TwitterSearchManager
+from .search import search_manager_from_config
 from .shelf import shelf_from_config
-from .twitter_api import Twitter
 
 
 def fault_barrier(fn):
@@ -28,14 +27,20 @@ def fault_barrier(fn):
     return process
 
 
+def get_search_manager(config=None, **default_init):
+    if config is None:
+        config = get_config()['SearchManager']
+    return search_manager_from_config(config, **default_init)
+
+
 class TwitterSearchBolt(Bolt):
     def initialize(self, conf, ctx):
         """Initialization steps:
 
-        1. Prepare :class:`~birding.twitter_api.Twitter` object w/OAuth file.
+        1. Get :func:`~birding.search.search_manager_from_config`.
         2. Prepare to track searched terms as to avoid redundant searches.
         """
-        self.manager = TwitterSearchManager(Twitter.from_oauth_file())
+        self.manager = get_search_manager()
         config = get_config()['TwitterSearchBolt']
         self.term_shelf = shelf_from_config(config)
 
@@ -61,9 +66,9 @@ class TwitterLookupBolt(Bolt):
     def initialize(self, conf, ctx):
         """Initialization steps:
 
-        1. Prepare :class:`~birding.twitter_api.Twitter` object w/OAuth file.
+        1. Get :func:`~birding.search.search_manager_from_config`.
         """
-        self.manager = TwitterSearchManager(Twitter.from_oauth_file())
+        self.manager = get_search_manager()
 
     @fault_barrier
     def process(self, tup):

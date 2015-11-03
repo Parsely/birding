@@ -17,7 +17,7 @@ def shelf_from_config(config, **default_init):
     """Get a `Shelf` instance dynamically based on config.
 
     `config` is a dictionary containing ``shelf_*`` keys as defined in
-    ``birding.config``.
+    :mod:`birding.config`.
     """
     shelf_cls = import_name(config['shelf_class'], default_ns='birding.shelf')
     init = {}

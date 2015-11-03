@@ -11,11 +11,15 @@ API
 
 .. module:: birding.search
 
+.. autofunction:: search_manager_from_config()
+
 .. autoclass:: SearchManager
    :members:
 
 .. autoclass:: TwitterSearchManager
    :members:
+
+.. autofunction:: TwitterSearchManagerFromOAuth()
 
 
 .. Use ClassName() to remove __init__ function signature from autoclass, as
@@ -48,6 +52,8 @@ API
 
 
 .. module:: birding.shelf
+
+.. autofunction:: shelf_from_config()
 
 .. autoclass:: Shelf
    :members:
