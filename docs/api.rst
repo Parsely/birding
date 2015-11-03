@@ -3,6 +3,32 @@
 API
 ===
 
+.. Use ClassName() to remove __init__ function signature from autoclass, as
+   component classes are not instantiated directly.
+
+.. module:: birding.spout
+
+.. autofunction:: DispatchSpout()
+
+.. autoclass:: TermCycleSpout()
+   :members:
+
+
+.. module:: birding.bolt
+
+.. autoclass:: TwitterSearchBolt()
+   :members:
+
+.. autoclass:: TwitterLookupBolt()
+   :members:
+
+.. autoclass:: ElasticsearchIndexBolt()
+   :members:
+
+.. autoclass:: ResultTopicBolt()
+   :members:
+
+
 .. module:: birding.search
 
 .. autofunction:: search_manager_from_config()
@@ -28,32 +54,6 @@ API
    :members:
 
 .. autoclass:: GnipSearchManager
-   :members:
-
-
-.. Use ClassName() to remove __init__ function signature from autoclass, as
-   component classes are not instantiated directly.
-
-.. module:: birding.spout
-
-.. autofunction:: DispatchSpout()
-
-.. autoclass:: TermCycleSpout()
-   :members:
-
-
-.. module:: birding.bolt
-
-.. autoclass:: TwitterSearchBolt()
-   :members:
-
-.. autoclass:: TwitterLookupBolt()
-   :members:
-
-.. autoclass:: ElasticsearchIndexBolt()
-   :members:
-
-.. autoclass:: ResultTopicBolt()
    :members:
 
 
