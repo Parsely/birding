@@ -4,7 +4,7 @@ import textwrap
 from abc import ABCMeta, abstractmethod
 
 from .config import import_name
-from .twitter_api import Twitter
+from .twitter import Twitter
 
 
 def search_manager_from_config(config, **default_init):
@@ -98,7 +98,6 @@ class TwitterSearchManager(SearchManager):
 def TwitterSearchManagerFromOAuth(*a, **kw):
     """Build :class:`TwitterSearchManager` from user OAuth file.
 
-    Arguments are passed to
-    :meth:`birding.twitter_api.Twitter.from_oauth_file`.
+    Arguments are passed to :meth:`birding.twitter.Twitter.from_oauth_file`.
     """
     return TwitterSearchManager(Twitter.from_oauth_file(*a, **kw))

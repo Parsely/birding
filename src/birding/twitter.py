@@ -1,5 +1,7 @@
 """Minimal twitter API shim using http://mike.verdone.ca/twitter/."""
 
+from __future__ import absolute_import
+
 import os
 
 from twitter.api import Twitter as BaseTwitter

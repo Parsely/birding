@@ -26,8 +26,8 @@ Twitter API
 -----------
 
 To ease configuration, birding adds a
-:meth:`~birding.twitter_api.Twitter.from_oauth_file` method which will creates
-a `Twitter` binding using the OAuth credential file created by the ``twitter``
+:meth:`~birding.twitter.Twitter.from_oauth_file` method which will creates a
+`Twitter` binding using the OAuth credential file created by the ``twitter``
 command-line application. The ``twitter`` command need only be run once to
 create this file, which is saved in the user home directory at
 ``~/.twitter_oauth``. Once that file is in place, twitter API interactions look

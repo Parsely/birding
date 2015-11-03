@@ -3,7 +3,7 @@
 API
 ===
 
-.. module:: birding.twitter_api
+.. module:: birding.twitter
 
 .. autoclass:: Twitter
    :members:

@@ -2,7 +2,7 @@
 
 import logging
 
-from . import bolt, config, follow, search, shelf, spout, twitter_api
+from . import bolt, config, follow, search, shelf, spout, twitter
 from .version import VERSION, __version__
 from .version import __doc__ as __license__
 
@@ -17,7 +17,7 @@ __all__ = [
     'search',
     'shelf',
     'spout',
-    'twitter_api',
+    'twitter',
 ]
 
 
