@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 
+import codecs
 import json
 import sys
 from contextlib import contextmanager
@@ -11,6 +12,12 @@ from pykafka.exceptions import KafkaException
 
 from .config import get_config, import_name
 from .search import SearchManager
+
+
+# Force unicode stdio, avoid ASCII encoding errors.
+reload(sys)
+sys.stdout = codecs.getwriter('utf-8')(sys.stdout)
+sys.stdin = codecs.getreader('utf-8')(sys.stdin)
 
 
 def follow_topic_from_config():
