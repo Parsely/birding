@@ -44,6 +44,7 @@ install_requires = [
     'pykafka==1.1.0',
     'pyyaml==3.11',
     'repoze.lru==0.6',
+    'requests==2.8.1',
     'six==1.9.0',
     'streamparse==2.0.2',
     'travesty==0.1.1',

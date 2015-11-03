@@ -25,6 +25,7 @@ birding behavior when running locally or in production.
    tour
    production
    config
+   gnip
    api
 
 To discuss this project, join the `streamparse user group`_.

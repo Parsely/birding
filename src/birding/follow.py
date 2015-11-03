@@ -10,8 +10,8 @@ from time import sleep
 
 from pykafka.exceptions import KafkaException
 
+from .bolt import get_search_manager
 from .config import get_config, import_name
-from .search import SearchManager
 
 
 # Force unicode stdio, avoid ASCII encoding errors.
@@ -47,6 +47,7 @@ def follow_topic(kafka_class, name, retry_interval=1, **kafka_init):
                 print('Connected to Kafka.')
             break
 
+    dump = Dump()
     for message in consumer:
         with flushing(sys.stdout, sys.stderr):
             status = load(message.value)
@@ -56,6 +57,7 @@ def follow_topic(kafka_class, name, retry_interval=1, **kafka_init):
 
 def follow_fd(fd):
     """Dump each line of input to stdio."""
+    dump = Dump()
     for line in fd:
         if not line.strip():
             continue
@@ -73,12 +75,16 @@ def load(message):
         print(str(e), file=sys.stderr)
 
 
-def dump(*statuses):
-    try:
-        print(SearchManager.dump(statuses))
-        print('')
-    except UnicodeEncodeError as e:
-        print(str(e), file=sys.stderr)
+class Dump(object):
+    def __init__(self, *a, **kw):
+        self.manager = get_search_manager(*a, **kw)
+
+    def __call__(self, *statuses):
+        try:
+            print(self.manager.dump(statuses))
+            print('')
+        except UnicodeEncodeError as e:
+            print(str(e), file=sys.stderr)
 
 
 @contextmanager

@@ -3,18 +3,6 @@
 API
 ===
 
-.. module:: birding.twitter_api
-
-.. autoclass:: Twitter
-   :members:
-
-
-.. module:: birding.search
-
-.. autoclass:: SearchManager
-   :members:
-
-
 .. Use ClassName() to remove __init__ function signature from autoclass, as
    component classes are not instantiated directly.
 
@@ -41,10 +29,40 @@ API
    :members:
 
 
+.. module:: birding.search
+
+.. autofunction:: search_manager_from_config()
+
+.. autoclass:: SearchManager
+   :members:
+
+
+.. module:: birding.twitter
+
+.. autoclass:: Twitter
+   :members:
+
+.. autoclass:: TwitterSearchManager
+   :members:
+
+.. autofunction:: TwitterSearchManagerFromOAuth()
+
+
+.. module:: birding.gnip
+
+.. autoclass:: Gnip
+   :members:
+
+.. autoclass:: GnipSearchManager
+   :members:
+
+
 .. autofunction:: birding.config.get_config
 
 
 .. module:: birding.shelf
+
+.. autofunction:: shelf_from_config()
 
 .. autoclass:: Shelf
    :members:

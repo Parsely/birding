@@ -34,6 +34,9 @@ Defaults::
       - real-time analytics
       - apache storm
       - pypi
+    SearchManager:
+      class: birding.twitter.TwitterSearchManagerFromOAuth
+      init: {}
     TwitterSearchBolt:
       shelf_class: FreshLRUShelf
       shelf_init: {}
@@ -77,6 +80,9 @@ SCHEMA = tv.SchemaMapping().of(
     Spout = tv.String(),
     TermCycleSpout = tv.SchemaMapping().of(
         terms = tv.List().of(tv.String())),
+    SearchManager = tv.SchemaMapping().of(**{
+        'class': tv.String(),
+        'init': tv.StrMapping().of(tv.Passthrough())}),
     TwitterSearchBolt = tv.SchemaMapping().of(
         shelf_class = tv.String(),
         shelf_init = tv.StrMapping().of(tv.Passthrough()),

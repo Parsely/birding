@@ -26,8 +26,8 @@ Twitter API
 -----------
 
 To ease configuration, birding adds a
-:meth:`~birding.twitter_api.Twitter.from_oauth_file` method which will creates
-a `Twitter` binding using the OAuth credential file created by the ``twitter``
+:meth:`~birding.twitter.Twitter.from_oauth_file` method which will creates a
+`Twitter` binding using the OAuth credential file created by the ``twitter``
 command-line application. The ``twitter`` command need only be run once to
 create this file, which is saved in the user home directory at
 ``~/.twitter_oauth``. Once that file is in place, twitter API interactions look
@@ -40,9 +40,9 @@ Search Manager
 --------------
 
 It is useful to solve the problem itself before being concerned with details
-about the topology. birding's :class:`~birding.search.SearchManager` composes
-the `Twitter` object into higher-level method signatures which perform the
-processing steps needed for the given :ref:`topology`. A full interaction
+about the topology. birding's :class:`~birding.search.TwitterSearchManager`
+composes the `Twitter` object into higher-level method signatures which perform
+the processing steps needed for the given :ref:`topology`. A full interaction
 before applying Storm looks like this (see ``In[2]``):
 
 * `Simple Simulated Stream <https://github.com/Parsely/birding/blob/master/docs/Simple%20Simulated%20Stream.ipynb>`_
