@@ -7,10 +7,10 @@
 SCALA_VERSION=2.10
 KAFKA_VERSION=0.8.2.1
 #UNPACKED=kafka_$SCALA_VERSION-$KAFKA_VERSION
-#Use a SNAPSHOT build instead:
-UNPACKED=kafka_2.10-0.8.3-SNAPSHOT
+#Use the release candidate:
+UNPACKED=kafka_2.10-0.9.0.0
 ARCHIVE=$UNPACKED.tgz
-MD5SUM=16cbbdf77c5e2e17aa469f4430ff51a4
+SHA1SUM=8fb7a6db0122e4b39ab64bc21b2c72e5fa5d76e4
 
 DESTINATION=$NIXD_OPT/kafka
 KAFKA_CONF_PATH=$DESTINATION/config/birding-kafka.properties
@@ -25,9 +25,9 @@ check() {
 
 resources() {
     #local url=`locate_apache_mirror /kafka/$KAFKA_VERSION/$ARCHIVE`
-    #Use a SNAPSHOT build instead:
-    local url='https://github.com/rduplain/build/raw/birding/kafka_2.10-0.8.3-SNAPSHOT-c8e62c9.tgz'
-    echo $url $ARCHIVE md5 $MD5SUM
+    #Use the release candidate:
+    local url='https://people.apache.org/~junrao/kafka-0.9.0.0-candidate1/kafka_2.10-0.9.0.0.tgz'
+    echo $url $ARCHIVE sha1 $SHA1SUM
 }
 
 pretest() {
